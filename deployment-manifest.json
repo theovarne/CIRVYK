@@ -1,0 +1,448 @@
+{
+  "schema": "circuit.vercel-deployment-files.v1",
+  "sourceCommit": "a11f3f07d0faccf699a2772a47c70767b4cad3a0",
+  "staticOutput": "public",
+  "functions": [
+    "api/config.mjs",
+    "api/observation.mjs"
+  ],
+  "excludes": [
+    ".env*",
+    ".vercel/",
+    ".openai/",
+    ".git/",
+    ".wrangler/",
+    "node_modules/",
+    "*.log"
+  ],
+  "files": [
+    {
+      "path": ".env.example",
+      "bytes": 333,
+      "sha256": "e0f3ac2ed30df01fbe5a46e8fe816a418037f4313962a6e1f7ad1c6c2e7d5c71"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 74,
+      "sha256": "f9bf52d0b4493c944f2a9a4847b01c3673b481334883b2ec87147884dc8b0dca"
+    },
+    {
+      "path": ".vercelignore",
+      "bytes": 62,
+      "sha256": "af4236e003d2e0661d06f77b81bf7a3ac34841313e5802d0f342b0c38443afb8"
+    },
+    {
+      "path": "api/config.mjs",
+      "bytes": 244,
+      "sha256": "099b00739e6569a5870e70ec336974053665679e40c516e1cb38d7aebab9999e"
+    },
+    {
+      "path": "api/observation.mjs",
+      "bytes": 244,
+      "sha256": "099b00739e6569a5870e70ec336974053665679e40c516e1cb38d7aebab9999e"
+    },
+    {
+      "path": "DEPLOYMENT.md",
+      "bytes": 4809,
+      "sha256": "7a55df7fe0cc202d23cca08a9f5b50c2a7925edcf4e2d24622b5c21db0e1da14"
+    },
+    {
+      "path": "docs/architecture.md",
+      "bytes": 6157,
+      "sha256": "70213813be1f9e71241ade71b3386d3f3a9bc4dd28222caf75e09ab96dce2687"
+    },
+    {
+      "path": "docs/data-model.md",
+      "bytes": 5717,
+      "sha256": "cbb3529c8e24ecfda929be23c7477fd0965bad8eebf55a2a62ef97f0947522d2"
+    },
+    {
+      "path": "docs/development.md",
+      "bytes": 5923,
+      "sha256": "76925d44135e289cc1b4a384c674f0e49b30947a7fc4c24966a05d6b5e8b3f5b"
+    },
+    {
+      "path": "docs/licenses/IBM-Plex-OFL.txt",
+      "bytes": 4456,
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+    },
+    {
+      "path": "docs/licenses/Inter-Tight-OFL.txt",
+      "bytes": 4383,
+      "sha256": "50240ab035cf1b6b3307940235481d515c4b6de3ab1fa843dbe59e7892cb9d58"
+    },
+    {
+      "path": "docs/media/cirvyk-header.jpg",
+      "bytes": 139361,
+      "sha256": "5f2a45b43486e7e224b691f011b97188dc5482fcb7491d74875cbe077c85692b"
+    },
+    {
+      "path": "docs/media/cirvyk-inspector.jpg",
+      "bytes": 146522,
+      "sha256": "3561a4dcd0e06523d2344bd9310286304071f7cef439139f0f1c921d03b4a28d"
+    },
+    {
+      "path": "docs/media/cirvyk-overview.jpg",
+      "bytes": 173212,
+      "sha256": "1dd6eafb8a527aa35654e57c99697e3a5c3bd3a4c6b1c0b81de5edd7c064c4d6"
+    },
+    {
+      "path": "docs/protocol.md",
+      "bytes": 11397,
+      "sha256": "5f181e75911486f5ee7704a938cc819398b29b19a07cd9e9e0906461140d140c"
+    },
+    {
+      "path": "docs/wallet-assets.md",
+      "bytes": 2239,
+      "sha256": "6b7e1b21c84f179138cd7ad27d087d5d86741775147c2f76d6be15300594e1ee"
+    },
+    {
+      "path": "lib/observation.mjs",
+      "bytes": 20753,
+      "sha256": "bb49cc69bf8787475a0dbac95fcae635d1a660fd3d02b816ed10840fdfb4ce3d"
+    },
+    {
+      "path": "lib/vercel-api.mjs",
+      "bytes": 841,
+      "sha256": "2a040f9e20440c66da863d812c7dff3a770d55033407eb57b2191b2099f5f7dd"
+    },
+    {
+      "path": "NOTICE.md",
+      "bytes": 2366,
+      "sha256": "9e351c5c9dffadecdd47e3ebf96811b86a951c3d10de1a313d84c9f454eeb668"
+    },
+    {
+      "path": "package.json",
+      "bytes": 595,
+      "sha256": "7c181f6c73b90ef4d713a10bfa80ef5367d6881c4627c601d3a6861e946a96cb"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 1132,
+      "sha256": "af41fdeeafa6cb9008850ae893dccb03c71f17c5f6969bcff391ab2fd7b38258"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 40476,
+      "sha256": "780f8f97b3e838c9758172b0e0a7ff9d3d613ab0763b34a02e7d494b042ebe26"
+    },
+    {
+      "path": "public/assets/circuit-backplane.svg",
+      "bytes": 713350,
+      "sha256": "9b6845e7d3b03c46ce8593fae19a079a5d750de03e4a1c63a912ef29e69539ea"
+    },
+    {
+      "path": "public/assets/circuit-board.svg",
+      "bytes": 484104,
+      "sha256": "a8405d9529ff879b09c1073ccbb3affb233ea6d4f0be4e357c9db96d1478f98f"
+    },
+    {
+      "path": "public/assets/circuit-icon.svg",
+      "bytes": 359,
+      "sha256": "a4d181a71b2d8b9e7a3285bf131e2f537184ca5f59a577d24daa912d8cf61ac4"
+    },
+    {
+      "path": "public/assets/fonts/ibm-plex-mono-400.ttf",
+      "bytes": 128812,
+      "sha256": "a7fdc993f9f0387caedba4e42521136fa97e4c0837ae6239bf0413ccf8af00c2"
+    },
+    {
+      "path": "public/assets/fonts/ibm-plex-mono-500.ttf",
+      "bytes": 129916,
+      "sha256": "4fc14a73ca53ba9d32fd759ae1ca1a3133326035d0dd337862b3ee1633cc156e"
+    },
+    {
+      "path": "public/assets/fonts/ibm-plex-mono-600.ttf",
+      "bytes": 133444,
+      "sha256": "754dfc9d50cf7aabfb6b108d2c2f7d20a3f1f2cc6f6c01640c6728091272cec0"
+    },
+    {
+      "path": "public/assets/fonts/inter-tight-500.ttf",
+      "bytes": 301472,
+      "sha256": "c2a4bdafb30500a3bd0843f95ad659ad38492f025837803e6a8ef8672c575e8e"
+    },
+    {
+      "path": "public/assets/fonts/inter-tight-600.ttf",
+      "bytes": 302212,
+      "sha256": "a40a1fdc93cadcbb0e3ba16d6010988118a1a3add06a097330b09cb41c2b8d45"
+    },
+    {
+      "path": "public/assets/fonts/inter-tight-700.ttf",
+      "bytes": 302808,
+      "sha256": "98272f3512338c52940816f5db61966ca1cdbc3cdb3c0d981da22612723da59e"
+    },
+    {
+      "path": "public/assets/social-github.svg",
+      "bytes": 1563,
+      "sha256": "3c7623c48d90002f42a5f227cc824c8c9caedfc9e4cff593c0e5b95318796ae1"
+    },
+    {
+      "path": "public/assets/social-x.svg",
+      "bytes": 275,
+      "sha256": "6c7d39c9950951690a6ad2b68e37e479c010dea614c7205cf0d1d59348b27370"
+    },
+    {
+      "path": "public/assets/wallets/backpack.png",
+      "bytes": 1645,
+      "sha256": "9dd6cc8b1f50f4b575ad23e79656eef720ee05820a3011bfda7aa61b54d56af6"
+    },
+    {
+      "path": "public/assets/wallets/coinbase.svg",
+      "bytes": 518,
+      "sha256": "eb728f9afa3b934f43dc77e99914c2fe62124c056fa6b1c3d00c8b80c917acf4"
+    },
+    {
+      "path": "public/assets/wallets/okx.png",
+      "bytes": 1069,
+      "sha256": "1d3983b221758ace5cce1223c36197127e166e580fd69b62394d48fb1df3b249"
+    },
+    {
+      "path": "public/assets/wallets/phantom.svg",
+      "bytes": 1108,
+      "sha256": "f0a1e2263ef6cdf30ab88d2f53e6d4e16a40e66fc3f4d28755d6bc11bb19ec81"
+    },
+    {
+      "path": "public/assets/wallets/solflare.svg",
+      "bytes": 1021,
+      "sha256": "3657af4bb3ce6c20f8703d7620cd965a6441d0806121cea9c5d013ff793b298e"
+    },
+    {
+      "path": "public/assets/workbench-chassis.svg",
+      "bytes": 120898,
+      "sha256": "8c07c142f93ed1ff0e693d9d3c47b00ffe40ab4ad1a2ca5c116ff52e6af9d761"
+    },
+    {
+      "path": "public/config/rules.js",
+      "bytes": 486,
+      "sha256": "20921abeec0780c0e2a3b26c5aebcb7a95a5a1217025c302d93c1334c767670d"
+    },
+    {
+      "path": "public/config/site.js",
+      "bytes": 1080,
+      "sha256": "84a1bc9f611463f37f883d34e6d68dd9eef0d037a84fba6c49065ddafe6597c4"
+    },
+    {
+      "path": "public/favicon.ico",
+      "bytes": 3292,
+      "sha256": "c8a07558e29f3bbaf6e9e508e19633eaf126c69d10e99e5d2f5bcb342224ae5e"
+    },
+    {
+      "path": "public/favicon.svg",
+      "bytes": 360,
+      "sha256": "00ace4ef4130d16bf5a0be17e45d69fb5c7f5ab300d0116534e25eca32bd2c69"
+    },
+    {
+      "path": "public/fonts-local.css",
+      "bytes": 1068,
+      "sha256": "45218d4b4a9c24056580baa373f19a3030400b2f986a5583b1811bac29ed8fc5"
+    },
+    {
+      "path": "public/header-wallet.css",
+      "bytes": 6437,
+      "sha256": "daf754bccc737864223433f2296968a653f54d0c1b7c7392fcd660d129fab690"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 37071,
+      "sha256": "c3ae444f61fc0d31ea9e723be3742413958b6b91d9d4780ddd5612367e42700c"
+    },
+    {
+      "path": "public/modules/app.js",
+      "bytes": 52148,
+      "sha256": "0c0662983281a0749fd096a0dd380617e9c907d34f32f82b1ca4709daa6f854b"
+    },
+    {
+      "path": "public/modules/dashboard.js",
+      "bytes": 7933,
+      "sha256": "96e19fd58ba6438c4b77106060e63d1db4ab5d8f48ca579b58bb93602aa1c788"
+    },
+    {
+      "path": "public/modules/engine.js",
+      "bytes": 18063,
+      "sha256": "27cef1c4f55a67a3123598ff008e0fc8f44a2855e2dd43e385d7b5c274e3c457"
+    },
+    {
+      "path": "public/modules/instruments.js",
+      "bytes": 14043,
+      "sha256": "c24925e4d487f601d0daccfb99b9f17a5651877af39f6f3f0a4472169e9c7241"
+    },
+    {
+      "path": "public/modules/memory.js",
+      "bytes": 6622,
+      "sha256": "2221de036281a5056be453d5a1e65f2905b9cae98679e338dcefe23b9866114a"
+    },
+    {
+      "path": "public/modules/observation-store.js",
+      "bytes": 13321,
+      "sha256": "244e264e27d1a0de17e4043318e7af36fb2171b3da6fbfeaf6b3722155d4dd7b"
+    },
+    {
+      "path": "public/modules/renderer.js",
+      "bytes": 17505,
+      "sha256": "92e50d53e6e92f760f130b2e0721e28c441c0f405bbfa0c24ded516d7d1c8d9c"
+    },
+    {
+      "path": "public/modules/source-workspace.js",
+      "bytes": 19708,
+      "sha256": "61ddab6be169261fe0662562b2b34d774dc15d8908170f2ba2033ad691c97bcd"
+    },
+    {
+      "path": "public/modules/time.js",
+      "bytes": 2920,
+      "sha256": "890272f4d5c5fe92a34c297bad32ec74760424d3d806b941a5d944b14682b8e0"
+    },
+    {
+      "path": "public/modules/wallet.js",
+      "bytes": 13717,
+      "sha256": "984ff32efa26aaa43aac40e5cc02cbd9b31002a6da5e8efcf136582ac6945a8b"
+    },
+    {
+      "path": "public/modules/workbench.js",
+      "bytes": 22382,
+      "sha256": "574534f7585e23d69608e1328410494185f13d6c9943c7cb4d62aa2d07e8d698"
+    },
+    {
+      "path": "public/restoration.css",
+      "bytes": 39420,
+      "sha256": "a264c8c5c0fd2bb03f18a490ba620315bc001f8dae7950005a0af8e9785e4a30"
+    },
+    {
+      "path": "public/source-manifest.json",
+      "bytes": 356341,
+      "sha256": "673365c6d12a4988f53671b3e47f917d91af38be374914f384c36f1d89684660"
+    },
+    {
+      "path": "public/source-workspace.css",
+      "bytes": 8546,
+      "sha256": "1d435496f83bb0f0823fb71d396977ae79ed2aec199e6a597904d0a9f3f29bbf"
+    },
+    {
+      "path": "public/styles.css",
+      "bytes": 27665,
+      "sha256": "4fb9e60f466608c0426914b7a225853806e4b327806b749d60e8a8355eaca2ca"
+    },
+    {
+      "path": "public/workbench.css",
+      "bytes": 17374,
+      "sha256": "a70a862ee4db9adf11ecb28103bc36527ea2f38d281b71c3e62ec72c7471aa8f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8361,
+      "sha256": "bf8d95cfb0b9a73d4a149f907213220e84b770797e4abbb6ef21075608b686ae"
+    },
+    {
+      "path": "scripts/dev.mjs",
+      "bytes": 2022,
+      "sha256": "50bc8c0e0981888fb8b489a20df6323b1610532b7a383d28d44902e88af6da73"
+    },
+    {
+      "path": "scripts/generate-public-source.mjs",
+      "bytes": 4500,
+      "sha256": "227e5739ffebbe93d7e446d5c2c2db62ded12fa1fd143ac51bb1fc5fb311489a"
+    },
+    {
+      "path": "scripts/sync-brand.mjs",
+      "bytes": 1900,
+      "sha256": "1abd59b962d8f513eb2fce23b4ae97bde2cd52b2ca8ec36db848e5fd64be5ab2"
+    },
+    {
+      "path": "scripts/verify-port.mjs",
+      "bytes": 8106,
+      "sha256": "9d8f7faaf054cb238196291cc69e121d086eaa0b229bb1521dab6a9ada2be089"
+    },
+    {
+      "path": "tests/app-interactions.test.mjs",
+      "bytes": 12223,
+      "sha256": "9e8288ed6705b78bbfc6494a1147201223f78adb592789a74c58e13dddd43374"
+    },
+    {
+      "path": "tests/brand.test.mjs",
+      "bytes": 7202,
+      "sha256": "cc497dd2c335e0695633ed15a7974b7cc47144e4135054b0b71fe2571a5563a1"
+    },
+    {
+      "path": "tests/dashboard.test.mjs",
+      "bytes": 1949,
+      "sha256": "eef8c1ab6c48a3aac1b828d32e9bb680b50d7d4f17c3c60a5630a65e09f41e22"
+    },
+    {
+      "path": "tests/engine.test.mjs",
+      "bytes": 7666,
+      "sha256": "be2382215d262a2faf50db1a076d60e7c5bd40440426d49db224e3e025aa45fa"
+    },
+    {
+      "path": "tests/export-brand.test.mjs",
+      "bytes": 5724,
+      "sha256": "1e6dfd2cbdca7b1a311870228634a0761b93a04d62d252c00bb30deb0648b562"
+    },
+    {
+      "path": "tests/helpers/source-dom.mjs",
+      "bytes": 2748,
+      "sha256": "6732b9439e93a67a520a46c04b6b030cab510242614090f51189241e3925b529"
+    },
+    {
+      "path": "tests/instruments.test.mjs",
+      "bytes": 11994,
+      "sha256": "60a48f2bcc7d4284ce65bc19bb87cfa7cd3f0a00653245eb51f9614004e474cd"
+    },
+    {
+      "path": "tests/memory.test.mjs",
+      "bytes": 8527,
+      "sha256": "52ada0a6806eeb2d4a36ff98dd5134b106280cbcc717af69a0d2fa684ec3e9fa"
+    },
+    {
+      "path": "tests/mobile-assets.test.mjs",
+      "bytes": 4292,
+      "sha256": "30f72e2f3568ba5b88c4f70e73ce3fb960f9cd441150173a23fe13a7b0f4f8f3"
+    },
+    {
+      "path": "tests/observation-store.test.mjs",
+      "bytes": 13219,
+      "sha256": "cc6b374b82554b603b1d05dd4239a953933d317773c2c29929ece3e8b8b0a22c"
+    },
+    {
+      "path": "tests/observation.test.mjs",
+      "bytes": 14848,
+      "sha256": "22c56d157c092dc10167408eaa24a16e05b73913fbab6b6b3f74842247443d7e"
+    },
+    {
+      "path": "tests/renderer-assets.test.mjs",
+      "bytes": 5284,
+      "sha256": "69760219cd7840c46506e7b0579ced43e29b5420a9a94359048eb63fe01ce891"
+    },
+    {
+      "path": "tests/source-workspace.test.mjs",
+      "bytes": 15191,
+      "sha256": "9fae1c6e38b899ecfb10b76bd161202a704d08e4b91aa14c92c757f8200c3e26"
+    },
+    {
+      "path": "tests/time.test.mjs",
+      "bytes": 6167,
+      "sha256": "87f43ad038f743c6e9c824d71a617f8ad18bbb7a1b07b0deb5bef42884497c09"
+    },
+    {
+      "path": "tests/vercel-adapter.test.mjs",
+      "bytes": 7333,
+      "sha256": "d2e8f4cafeb93bd8a2fe850a39ae3806484a096296d6830b6895f004ad620253"
+    },
+    {
+      "path": "tests/wallet.test.mjs",
+      "bytes": 19093,
+      "sha256": "792bb1321c5ad77b4921130842fe75f6d47d55f86d97f49163274c2eb07d980c"
+    },
+    {
+      "path": "tests/workbench.test.mjs",
+      "bytes": 17601,
+      "sha256": "e68439cdbeaa42c7c375ce307626ead80f54d0c6fee4430599abd909bfe133f2"
+    },
+    {
+      "path": "vercel.json",
+      "bytes": 568,
+      "sha256": "05bb7e144d17024e731cc7435773d4bea2dc58d227eba4207a68d05fa21f4e67"
+    }
+  ],
+  "websiteBrand": "CIRVYK",
+  "brandingBaseDeployment": "dpl_BJXRcRtrRtMGJ16G1dLcmeyPLiCR",
+  "accent": "#7fe03b"
+}
