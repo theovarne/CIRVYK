@@ -1,1 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="CIRVYK icon"><rect width="32" height="32" rx="3" fill="#111A18"/><g fill="none" stroke="#C8CEC5" stroke-width="1.2"><path d="M10 10h12v12H10zM6 12h4m-4 4h4m-4 4h4m12-8h4m-4 4h4m-4 4h4M12 6v4m4-4v4m4-4v4m-8 12v4m4-4v4m4-4v4"/></g><path d="M14 14h4v4h-4z" fill="#D6814E"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="CIRVYK cube logo">
+  <title>CIRVYK</title>
+  <defs>
+    <linearGradient id="base-top" x1="0" y1="0" x2="0.85" y2="1"><stop stop-color="#19e533"/><stop offset="1" stop-color="#0ad520"/></linearGradient>
+    <linearGradient id="base-front" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#0ac41e"/><stop offset="1" stop-color="#0ba51b"/></linearGradient>
+    <linearGradient id="cube-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#292b2a"/><stop offset="1" stop-color="#222423"/></linearGradient>
+    <linearGradient id="cube-left" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#181b19"/><stop offset="1" stop-color="#101311"/></linearGradient>
+    <linearGradient id="cube-right" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#141715"/><stop offset="1" stop-color="#090c0a"/></linearGradient>
+  </defs>
+  <g stroke="#edf2ed" stroke-width="5.5" stroke-linejoin="round" stroke-linecap="round">
+    <path fill="url(#base-front)" d="M23 299 256 425 489 299v29q0 10-9 15L267 459q-11 6-22 0L32 343q-9-5-9-15Z"/>
+    <path fill="url(#base-top)" d="m32 289 213-116q11-6 22 0l213 116q18 10 0 20L267 425q-11 6-22 0L32 309q-18-10 0-20Z"/>
+    <path fill="none" stroke="#83ee86" d="m25 302 220 120q11 6 22 0l220-120"/>
+    <path fill="url(#cube-left)" d="m115 134 141 78v152l-141-75Z"/>
+    <path fill="url(#cube-right)" d="m256 212 141-78v155l-141 75Z"/>
+    <path fill="url(#cube-top)" d="m121 128 128-71q7-4 14 0l128 71q10 6 0 12l-128 71q-7 4-14 0l-128-71q-10-6 0-12Z"/>
+    <path fill="none" d="M115 136v153l141 75 141-75V136M256 215v149"/>
+  </g>
+  <g fill="#08ea2c">
+    <path d="m150 204 15 8q3 2 3 5v35q0 4-4 2l-15-8q-3-2-3-5v-34q0-5 4-3Z"/>
+    <path d="m211 237 15 8q3 2 3 5v35q0 4-4 2l-15-8q-3-2-3-5v-34q0-5 4-3Z"/>
+  </g>
+</svg>

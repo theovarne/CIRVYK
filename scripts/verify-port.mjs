@@ -107,6 +107,45 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
     const bytes = await fs.readFile(path.join(root, entry.path));
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `Publication must preserve ${entry.path}`);
   }
+  const logoPaths = new Set([
+    'public/assets/circuit-icon.svg', 'public/favicon.svg', 'public/favicon.ico',
+    'public/assets/brand/apple-touch-icon.png', 'public/assets/brand/icon-192.png',
+    'public/assets/brand/icon-512.png', 'public/assets/brand/share-card.png',
+    'public/index.html', 'public/config/site.js', 'public/source-manifest.json',
+    'README.md', 'NOTICE.md', 'docs/media/cirvyk-header.jpg',
+    'docs/media/cirvyk-overview.jpg', 'docs/media/cirvyk-inspector.jpg',
+    'scripts/dev.mjs', 'scripts/verify-port.mjs', 'tests/mobile-assets.test.mjs',
+  ]);
+  assert.equal(provenance.logo?.brand, BRAND_NAME, 'Reviewed logo identity must match CIRVYK');
+  assert.equal(provenance.logo.baseCommit, '4f02a7ccb739f71e20540ae8498115224d6b28ff');
+  assert.ok(Array.isArray(provenance.logo.changes) && provenance.logo.changes.length > 0, 'Logo changes must be explicitly reviewed');
+  assert.ok(Array.isArray(provenance.logo.protectedFiles) && provenance.logo.protectedFiles.length > 0, 'Logo review must protect existing implementation');
+  const logoReviewed = new Set();
+  for (const entry of provenance.logo.changes) {
+    assert.ok(logoPaths.has(entry.path), `Unreviewed logo change: ${entry.path}`);
+    assert.ok(!logoReviewed.has(entry.path), `Duplicate logo change: ${entry.path}`);
+    logoReviewed.add(entry.path);
+    assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+    assert.ok(entry.previousSha256 === null || /^[a-f0-9]{64}$/.test(entry.previousSha256), `Invalid prior logo digest: ${entry.path}`);
+    const bytes = await fs.readFile(path.join(root, entry.path));
+    assert.equal(bytes.byteLength, entry.bytes, `${entry.path} differs from reviewed logo size`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `${entry.path} differs from reviewed logo identity`);
+  }
+  assert.deepEqual([...logoReviewed].sort(), [...logoPaths].sort(), 'Every authorized logo asset and integration must be reviewed');
+  const logoProtected = new Set();
+  const hostManagedMetadata = new Set(['.gitignore', '.env.example', '.vercelignore', 'vercel.json']);
+  for (const entry of provenance.logo.protectedFiles) {
+    assert.ok(typeof entry.path === 'string' && !path.isAbsolute(entry.path) && !entry.path.split('/').some(part => !part || part === '..'), 'Invalid logo-protected path');
+    assert.ok(!logoPaths.has(entry.path) && !logoProtected.has(entry.path), `Invalid overlapping logo protection: ${entry.path}`);
+    assert.ok(!hostManagedMetadata.has(entry.path), `Host-managed metadata must retain its existing verification contract: ${entry.path}`);
+    logoProtected.add(entry.path);
+    const bytes = await fs.readFile(path.join(root, entry.path));
+    assert.equal(bytes.byteLength, entry.bytes, `Logo update must preserve size: ${entry.path}`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `Logo update must preserve ${entry.path}`);
+  }
+  for (const required of [...publicPaths, 'lib/observation.mjs', 'lib/vercel-api.mjs', 'api/config.mjs', 'api/observation.mjs']) {
+    if (!logoPaths.has(required)) assert.ok(logoProtected.has(required), `Logo review must protect ${required}`);
+  }
   // Vercel rewrites its working config after upload. Protect its runtime contract,
   // while byte hashes above continue to cover the shipped assets and API sources.
   const config = JSON.parse(await fs.readFile(path.join(root, 'vercel.json'), 'utf8'));
@@ -120,7 +159,7 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
   const shipped = JSON.parse(await fs.readFile(path.join(root, 'public/source-manifest.json'), 'utf8'));
   const measured = await generatePublicSource(root, { write: false, generatedAt: shipped.generatedAt });
   assert.deepEqual(shipped, measured, 'Source must show the exact actual reviewed files and measured counts');
-  return { verifiedFiles: provenance.files.length, brand: BRAND_NAME, accent: provenance.palette.accent, paletteChanges: provenance.palette.changes.length, brandingChanges: provenance.branding.changes.map(entry => entry.path), protectedFiles: provenance.publication.protectedFiles.length + 1, sourceFiles: measured.stats.files, sourceBytes: measured.stats.bytes, sourceCommit: provenance.sourceCommit };
+  return { verifiedFiles: provenance.files.length, brand: BRAND_NAME, accent: provenance.palette.accent, paletteChanges: provenance.palette.changes.length, brandingChanges: provenance.branding.changes.map(entry => entry.path), logoChanges: logoReviewed.size, protectedFiles: logoProtected.size + 1, sourceFiles: measured.stats.files, sourceBytes: measured.stats.bytes, sourceCommit: provenance.sourceCommit };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

@@ -1,6 +1,6 @@
 # CIRVYK
 
-![CIRVYK wordmark and circuit artwork captured from the application](docs/media/cirvyk-header.jpg)
+![CIRVYK cube logo, wordmark and circuit artwork captured from the application](docs/media/cirvyk-header.jpg)
 
 **A circuit that remembers.**
 

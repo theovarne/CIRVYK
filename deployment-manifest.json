@@ -32,6 +32,21 @@
       "sha256": "af4236e003d2e0661d06f77b81bf7a3ac34841313e5802d0f342b0c38443afb8"
     },
     {
+      "path": "DEPLOYMENT.md",
+      "bytes": 4809,
+      "sha256": "7a55df7fe0cc202d23cca08a9f5b50c2a7925edcf4e2d24622b5c21db0e1da14"
+    },
+    {
+      "path": "NOTICE.md",
+      "bytes": 2606,
+      "sha256": "4f503a9d4f60c1c434dba164306fa0f5b0b6031b921dc55f934b3807557490d4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8372,
+      "sha256": "bdc40774751c3560fdb7e9b5f4c492cb3b8508fb9a5299ae7f3b0639974aff10"
+    },
+    {
       "path": "api/config.mjs",
       "bytes": 244,
       "sha256": "099b00739e6569a5870e70ec336974053665679e40c516e1cb38d7aebab9999e"
@@ -40,11 +55,6 @@
       "path": "api/observation.mjs",
       "bytes": 244,
       "sha256": "099b00739e6569a5870e70ec336974053665679e40c516e1cb38d7aebab9999e"
-    },
-    {
-      "path": "DEPLOYMENT.md",
-      "bytes": 4809,
-      "sha256": "7a55df7fe0cc202d23cca08a9f5b50c2a7925edcf4e2d24622b5c21db0e1da14"
     },
     {
       "path": "docs/architecture.md",
@@ -73,18 +83,18 @@
     },
     {
       "path": "docs/media/cirvyk-header.jpg",
-      "bytes": 139361,
-      "sha256": "5f2a45b43486e7e224b691f011b97188dc5482fcb7491d74875cbe077c85692b"
+      "bytes": 146313,
+      "sha256": "428b51da466548b03e714f7e395932a01037cd793b1365d4635fae3c2903ae69"
     },
     {
       "path": "docs/media/cirvyk-inspector.jpg",
-      "bytes": 146522,
-      "sha256": "3561a4dcd0e06523d2344bd9310286304071f7cef439139f0f1c921d03b4a28d"
+      "bytes": 150478,
+      "sha256": "3de66b68fda696452f45e016b2caa406cfe95b6071c680e4c12a42e8ee8f1ed5"
     },
     {
       "path": "docs/media/cirvyk-overview.jpg",
-      "bytes": 173212,
-      "sha256": "1dd6eafb8a527aa35654e57c99697e3a5c3bd3a4c6b1c0b81de5edd7c064c4d6"
+      "bytes": 173296,
+      "sha256": "b636ed719b8c974f5e6ab60c6d71a63dc8e236c2b5634f78ff6d719c0d18ffc6"
     },
     {
       "path": "docs/protocol.md",
@@ -107,11 +117,6 @@
       "sha256": "2a040f9e20440c66da863d812c7dff3a770d55033407eb57b2191b2099f5f7dd"
     },
     {
-      "path": "NOTICE.md",
-      "bytes": 2366,
-      "sha256": "9e351c5c9dffadecdd47e3ebf96811b86a951c3d10de1a313d84c9f454eeb668"
-    },
-    {
       "path": "package.json",
       "bytes": 595,
       "sha256": "7c181f6c73b90ef4d713a10bfa80ef5367d6881c4627c601d3a6861e946a96cb"
@@ -123,8 +128,28 @@
     },
     {
       "path": "provenance.json",
-      "bytes": 40476,
-      "sha256": "1496fca6fcede2b5612b74ff6cdabfba562fb3f8cc1629f7e7c0d0c9d2bf5182"
+      "bytes": 52264,
+      "sha256": "bdd44730501d46fe28cdbf2c9a40e53743635fde64793f89cfe71f35f47e72e4"
+    },
+    {
+      "path": "public/assets/brand/apple-touch-icon.png",
+      "bytes": 8701,
+      "sha256": "43d57401a114273c9afe03beaa620db287dd1c3e322278d10592e901becb61aa"
+    },
+    {
+      "path": "public/assets/brand/icon-192.png",
+      "bytes": 9550,
+      "sha256": "70447d890116f8c0d05788059341efa617832ce619b3b9cfa75e24046c20f984"
+    },
+    {
+      "path": "public/assets/brand/icon-512.png",
+      "bytes": 26524,
+      "sha256": "7ac1ad9d6707a07fcdb68aedef3b0bd6cbca9549009beb5ca924099319b01575"
+    },
+    {
+      "path": "public/assets/brand/share-card.png",
+      "bytes": 67754,
+      "sha256": "2bce5c7d585675504df3f206bc232cd94ffbfc72d933e41017ca856008c5d6ec"
     },
     {
       "path": "public/assets/circuit-backplane.svg",
@@ -138,8 +163,8 @@
     },
     {
       "path": "public/assets/circuit-icon.svg",
-      "bytes": 359,
-      "sha256": "a4d181a71b2d8b9e7a3285bf131e2f537184ca5f59a577d24daa912d8cf61ac4"
+      "bytes": 1816,
+      "sha256": "4cd67a3210daa84548e3140b7caa25c7d79cf35c8b5436ba4368b02fe8e12ad5"
     },
     {
       "path": "public/assets/fonts/ibm-plex-mono-400.ttf",
@@ -218,18 +243,18 @@
     },
     {
       "path": "public/config/site.js",
-      "bytes": 1080,
-      "sha256": "84a1bc9f611463f37f883d34e6d68dd9eef0d037a84fba6c49065ddafe6597c4"
+      "bytes": 1089,
+      "sha256": "c8e5feffaf869fcd25b5fabccd5c4c9cd23b72bf89e55c188d022a97f3e5986a"
     },
     {
       "path": "public/favicon.ico",
-      "bytes": 3292,
-      "sha256": "c8a07558e29f3bbaf6e9e508e19633eaf126c69d10e99e5d2f5bcb342224ae5e"
+      "bytes": 6280,
+      "sha256": "9d5c6dd8312fa477a07cee0920e4a843d1b96ebc57a79241f64a818f84f9ab63"
     },
     {
       "path": "public/favicon.svg",
-      "bytes": 360,
-      "sha256": "00ace4ef4130d16bf5a0be17e45d69fb5c7f5ab300d0116534e25eca32bd2c69"
+      "bytes": 990,
+      "sha256": "61159cb6794f4fca4ee5a211ecd23d8ac42e042c220ba024052a0913897c8a59"
     },
     {
       "path": "public/fonts-local.css",
@@ -243,8 +268,8 @@
     },
     {
       "path": "public/index.html",
-      "bytes": 37071,
-      "sha256": "c3ae444f61fc0d31ea9e723be3742413958b6b91d9d4780ddd5612367e42700c"
+      "bytes": 37596,
+      "sha256": "bb9ded53fdf020666cf9a86262acf3df95bee6d7e889e073ad83f6250b2dab68"
     },
     {
       "path": "public/modules/app.js",
@@ -308,8 +333,8 @@
     },
     {
       "path": "public/source-manifest.json",
-      "bytes": 356341,
-      "sha256": "91f2917dccfc29a4aa36b03b68a336b3256c43430b854c2d781a97b4401d5bab"
+      "bytes": 356912,
+      "sha256": "b4fd58a5bf9531a2ba103f52747468b4870a4c99722da62ef05f6edaf4d24a4f"
     },
     {
       "path": "public/source-workspace.css",
@@ -327,14 +352,9 @@
       "sha256": "a70a862ee4db9adf11ecb28103bc36527ea2f38d281b71c3e62ec72c7471aa8f"
     },
     {
-      "path": "README.md",
-      "bytes": 8361,
-      "sha256": "bf8d95cfb0b9a73d4a149f907213220e84b770797e4abbb6ef21075608b686ae"
-    },
-    {
       "path": "scripts/dev.mjs",
-      "bytes": 2022,
-      "sha256": "50bc8c0e0981888fb8b489a20df6323b1610532b7a383d28d44902e88af6da73"
+      "bytes": 2043,
+      "sha256": "2bd3a9f48c0ffba8810abb639b909bed1acc114ef3242673aad05bf8f72156f5"
     },
     {
       "path": "scripts/generate-public-source.mjs",
@@ -348,8 +368,8 @@
     },
     {
       "path": "scripts/verify-port.mjs",
-      "bytes": 8404,
-      "sha256": "57d100003614adcdf51bc08a38301a74a8024c664fb06032dbd68351240370e5"
+      "bytes": 11588,
+      "sha256": "740c80b4c0e880776fb22e47e01769198ed90c2fea84478fc4338c05660c0f3e"
     },
     {
       "path": "tests/app-interactions.test.mjs",
@@ -393,8 +413,8 @@
     },
     {
       "path": "tests/mobile-assets.test.mjs",
-      "bytes": 4292,
-      "sha256": "30f72e2f3568ba5b88c4f70e73ce3fb960f9cd441150173a23fe13a7b0f4f8f3"
+      "bytes": 4507,
+      "sha256": "11626e605b004ca102f6e99801cadfb1e6eeb9b4beec8248546e0dfa177c006e"
     },
     {
       "path": "tests/observation-store.test.mjs",

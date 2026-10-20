@@ -52,13 +52,17 @@ test('favicon links resolve to real SVG and three bounded ICO images', async () 
   const links = [...html.matchAll(/<link\b[^>]*rel="icon"[^>]*>/g)].map(match => match[0]);
   assert.equal(links.length, 2);
   for (const link of links) {
-    const href = link.match(/href="([^"]+)"/)[1];
+    const href = new URL(link.match(/href="([^"]+)"/)[1], 'https://cirvyk.example').pathname;
     assert.ok(['/favicon.svg', '/favicon.ico'].includes(href));
     assert.ok((await stat(new URL(`../public${href}`, import.meta.url))).size > 0);
   }
   const svg = await readFile(new URL('../public/favicon.svg', import.meta.url), 'utf8');
-  assert.equal(svg.trim(), (await readFile(new URL('../public/assets/circuit-icon.svg', import.meta.url), 'utf8')).trim());
-  assert.doesNotMatch(svg, /<script|<foreignObject|href=|\son\w+=/i);
+  const headerSvg = await readFile(new URL('../public/assets/circuit-icon.svg', import.meta.url), 'utf8');
+  // The favicon has stronger edges and a 32-unit grid to stay legible at 16px.
+  for (const asset of [svg, headerSvg]) {
+    assert.match(asset, /aria-label="CIRVYK cube logo"/);
+    assert.doesNotMatch(asset, /<script|<foreignObject|href=|\son\w+=/i);
+  }
   const ico = await readFile(new URL('../public/favicon.ico', import.meta.url));
   assert.equal(ico.readUInt16LE(0), 0); assert.equal(ico.readUInt16LE(2), 1); assert.equal(ico.readUInt16LE(4), 3);
   const sizes = [];

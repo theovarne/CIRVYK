@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="CIRVYK icon"><rect width="32" height="32" rx="3" fill="#111A18"/><g fill="none" stroke="#C8CEC5" stroke-width="1.2"><path d="M10 10h12v12H10zM6 12h4m-4 4h4m-4 4h4m12-8h4m-4 4h4m-4 4h4M12 6v4m4-4v4m4-4v4m-8 12v4m4-4v4m4-4v4"/></g><path d="M14 14h4v4h-4z" fill="#D6814E"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="CIRVYK cube logo">
+  <title>CIRVYK</title>
+  <g stroke="#edf2ed" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#0bad1c" d="m1.5 18.8 14.5 7.9 14.5-7.9v1.8q0 .6-.6.9L16.7 28.8q-.7.4-1.4 0L2.1 21.5q-.6-.3-.6-.9Z"/>
+    <path fill="#10dc29" d="m2.1 18.2 13.2-7.3q.7-.4 1.4 0l13.2 7.3q1.1.6 0 1.2l-13.2 7.3q-.7.4-1.4 0L2.1 19.4q-1.1-.6 0-1.2Z"/>
+    <path fill="#161917" d="m7.2 8.5 8.8 4.9v9.5l-8.8-4.7Z"/>
+    <path fill="#0d100e" d="m16 13.4 8.8-4.9v9.7L16 22.9Z"/>
+    <path fill="#272a28" d="m7.6 8.1 8-4.4q.4-.2.8 0l8 4.4q.6.4 0 .8l-8 4.4q-.4.2-.8 0l-8-4.4q-.6-.4 0-.8Z"/>
+    <path fill="none" d="M7.2 8.6v9.6l8.8 4.7 8.8-4.7V8.6M16 13.5v9.4"/>
+  </g>
+  <g fill="#08ea2c">
+    <path d="m9.3 12.8 1 .5q.2.1.2.3v2.2q0 .3-.3.2l-.9-.6q-.2-.1-.2-.3V13q0-.3.2-.2Z"/>
+    <path d="m13.1 14.9 1 .5q.2.1.2.3v2.2q0 .3-.3.2l-.9-.6q-.2-.1-.2-.3v-2.1q0-.3.2-.2Z"/>
+  </g>
+</svg>

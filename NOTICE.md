@@ -2,6 +2,10 @@
 
 CIRVYK retains circuit geometry, fonts and third-party marks from its existing implementation. Historical source names and URLs below identify provenance, not the current application brand.
 
+## CIRVYK brand mark
+
+The CIRVYK cube logo was recreated as a vector from the project owner’s supplied reference image. The header mark, small-size favicon, touch icon and sharing image use that same cube, two green eyes and green base.
+
 ## Circuit artwork
 
 The detailed circuit geometry was adapted from the reference project's publicly delivered assets at [ohmium.fun](https://ohmium.fun/). The existing project records describe its geometry tooling as a vendored Anatomy isometric toolkit. The board, physical signal backplane and Workbench chassis retain the inherited display geometry; CIRVYK labels and interactions map that artwork to the six local processing stages.

@@ -7,7 +7,7 @@ const handleApi = createApiHandler();
 
 const publicRoot = fileURLToPath(new URL('../public/', import.meta.url));
 const port = Number(process.env.PORT || 5175);
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json; charset=utf-8', '.ico': 'image/x-icon', '.ttf': 'font/ttf' };
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json; charset=utf-8', '.ico': 'image/x-icon', '.png': 'image/png', '.ttf': 'font/ttf' };
 const server = http.createServer(async (incoming, outgoing) => {
   try {
     const url = new URL(incoming.url || '/', `http://127.0.0.1:${port}`);
