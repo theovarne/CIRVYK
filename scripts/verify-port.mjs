@@ -91,9 +91,16 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
     'public/modules/instruments.js', 'public/modules/source-workspace.js',
     'public/modules/workbench.js', 'public/modules/time.js', 'public/source-manifest.json',
   ]);
+  const repositoryOnlyFiles = new Set(['.gitignore', '.env.example']);
   for (const entry of provenance.publication.changes) {
     assert.ok(publicationPaths.has(entry.path), `Unreviewed publication change: ${entry.path}`);
-    const bytes = await fs.readFile(path.join(root, entry.path));
+    let bytes;
+    try { bytes = await fs.readFile(path.join(root, entry.path)); }
+    catch (error) {
+      // Vercel excludes these repository files before executing a remote build.
+      if (error.code === 'ENOENT' && repositoryOnlyFiles.has(entry.path)) continue;
+      throw error;
+    }
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `${entry.path} differs from reviewed publication`);
   }
   for (const entry of provenance.publication.protectedFiles) {

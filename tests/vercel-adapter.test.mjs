@@ -1,3 +1,6 @@
+import os from 'node:os';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -120,4 +123,21 @@ test('direct Vercel Node endpoints accept clean URLs and keep only an optional c
   assert.deepEqual(Object.keys(config.functions).sort(), ['api/config.mjs', 'api/observation.mjs']);
   assert.equal(config.functions['api/observation.mjs'].maxDuration, 300);
   assert.equal(config.env, undefined);
+});
+
+
+test('host builds tolerate omitted repository metadata while still rejecting missing application files', async t => {
+  const source = fileURLToPath(new URL('../', import.meta.url));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'cirvyk-host-build-'));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  await fs.cp(source, root, { recursive: true, filter: filename => {
+    const relative = path.relative(source, filename);
+    return !relative.split(path.sep).some(part => ['node_modules', '.git', '.vercel', '.openai'].includes(part));
+  } });
+  await fs.rm(path.join(root, '.gitignore'));
+  await fs.rm(path.join(root, '.env.example'));
+  const result = await verifyPort(root);
+  assert.equal(result.brand, 'CIRVYK');
+  await fs.rm(path.join(root, 'public/modules/engine.js'));
+  await assert.rejects(() => verifyPort(root), /Every shipped public file/);
 });

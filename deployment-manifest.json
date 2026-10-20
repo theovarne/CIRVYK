@@ -124,7 +124,7 @@
     {
       "path": "provenance.json",
       "bytes": 40476,
-      "sha256": "780f8f97b3e838c9758172b0e0a7ff9d3d613ab0763b34a02e7d494b042ebe26"
+      "sha256": "1496fca6fcede2b5612b74ff6cdabfba562fb3f8cc1629f7e7c0d0c9d2bf5182"
     },
     {
       "path": "public/assets/circuit-backplane.svg",
@@ -309,7 +309,7 @@
     {
       "path": "public/source-manifest.json",
       "bytes": 356341,
-      "sha256": "673365c6d12a4988f53671b3e47f917d91af38be374914f384c36f1d89684660"
+      "sha256": "91f2917dccfc29a4aa36b03b68a336b3256c43430b854c2d781a97b4401d5bab"
     },
     {
       "path": "public/source-workspace.css",
@@ -348,8 +348,8 @@
     },
     {
       "path": "scripts/verify-port.mjs",
-      "bytes": 8106,
-      "sha256": "9d8f7faaf054cb238196291cc69e121d086eaa0b229bb1521dab6a9ada2be089"
+      "bytes": 8404,
+      "sha256": "57d100003614adcdf51bc08a38301a74a8024c664fb06032dbd68351240370e5"
     },
     {
       "path": "tests/app-interactions.test.mjs",
@@ -423,8 +423,8 @@
     },
     {
       "path": "tests/vercel-adapter.test.mjs",
-      "bytes": 7333,
-      "sha256": "d2e8f4cafeb93bd8a2fe850a39ae3806484a096296d6830b6895f004ad620253"
+      "bytes": 8318,
+      "sha256": "553e492269fef003dda11f1484fa0becbda3e0840f0f810d85b12eebee12ff34"
     },
     {
       "path": "tests/wallet.test.mjs",

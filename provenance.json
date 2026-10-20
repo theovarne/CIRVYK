@@ -191,7 +191,7 @@
     {
       "path": "public/source-manifest.json",
       "bytes": 356341,
-      "sha256": "673365c6d12a4988f53671b3e47f917d91af38be374914f384c36f1d89684660"
+      "sha256": "91f2917dccfc29a4aa36b03b68a336b3256c43430b854c2d781a97b4401d5bab"
     },
     {
       "path": "public/source-workspace.css",
@@ -290,7 +290,7 @@
       {
         "path": "public/source-manifest.json",
         "previousSha256": "267e8f872eca9109e885173423dd9aca8760096f56e13e0ea19a4bb94475d397",
-        "sha256": "673365c6d12a4988f53671b3e47f917d91af38be374914f384c36f1d89684660",
+        "sha256": "91f2917dccfc29a4aa36b03b68a336b3256c43430b854c2d781a97b4401d5bab",
         "bytes": 356341
       }
     ],
@@ -621,7 +621,7 @@
       {
         "path": "public/source-manifest.json",
         "bytes": 356341,
-        "sha256": "673365c6d12a4988f53671b3e47f917d91af38be374914f384c36f1d89684660",
+        "sha256": "91f2917dccfc29a4aa36b03b68a336b3256c43430b854c2d781a97b4401d5bab",
         "previousSha256": "cedd57a128ee38ec66485bfa3a409103df47ba8a21bfc0d390179dd3461e6e97"
       },
       {
@@ -946,7 +946,7 @@
       {
         "path": "public/source-manifest.json",
         "bytes": 356341,
-        "sha256": "673365c6d12a4988f53671b3e47f917d91af38be374914f384c36f1d89684660",
+        "sha256": "91f2917dccfc29a4aa36b03b68a336b3256c43430b854c2d781a97b4401d5bab",
         "previousSha256": "b2a3c06cf95a7e1402661cf05fb24804ea4fe29212caf5ad8fbf252bbc420f09"
       }
     ],
