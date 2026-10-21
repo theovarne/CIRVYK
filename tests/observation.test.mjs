@@ -52,7 +52,7 @@ test('validates base58 keys by decoded byte length', () => {
   assert.equal(isSignature(MINT), false);
 });
 
-test('missing mint/accounts stays unconfigured without calling the network', async () => {
+test('a published mint without observed accounts stays unconfigured without calling the network', async () => {
   const handler = makeHandler();
   const response = await handler(request(), {}, () => { throw new Error('network must not be called'); });
   const body = await response.json();
@@ -60,7 +60,8 @@ test('missing mint/accounts stays unconfigured without calling the network', asy
   assert.equal(body.coverage, 'unavailable');
   assert.equal(body.reconciledUntil, null);
   assert.deepEqual(body.pulses, []);
-  assert.deepEqual(body.missing, ['CIRCUIT_MINT', 'CIRCUIT_OBSERVED_ACCOUNTS']);
+  assert.deepEqual(body.missing, ['CIRCUIT_OBSERVED_ACCOUNTS']);
+  assert.equal(body.scope.mint, 'HE7BnoVVEGmjTn3MRffaZGZCNCHrwWWKmuhQKNRXpump');
 });
 
 test('public config excludes server URLs, URL credentials, and API keys', () => {

@@ -10,6 +10,8 @@ Inspect a component, follow a signal through its path, and revisit the Trace pro
 
 [Website](https://www.cirvyk.xyz/#home) · [Protocol](docs/protocol.md) · [Development](docs/development.md)
 
+**Solana mainnet CA:** `HE7BnoVVEGmjTn3MRffaZGZCNCHrwWWKmuhQKNRXpump` · [View mint on Solana Explorer](https://explorer.solana.com/address/HE7BnoVVEGmjTn3MRffaZGZCNCHrwWWKmuhQKNRXpump)
+
 ## Overview
 
 The reader checks finalized transactions involving explicitly configured Solana accounts and looks for evidence concerning a target mint. A shared browser store feeds those inputs into a deterministic engine. Circuit components, instruments and event details expose the same selected result.

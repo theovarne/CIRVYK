@@ -48,7 +48,7 @@ test('config remains an explicit unconfigured scope or a redacted server-configu
   assert.equal(defaults.headers.get('cache-control'), 'no-store');
   const empty = await defaults.json();
   assert.equal(empty.status, 'unconfigured');
-  assert.equal(empty.scope.mint, null);
+  assert.equal(empty.scope.mint, 'HE7BnoVVEGmjTn3MRffaZGZCNCHrwWWKmuhQKNRXpump');
   assert.deepEqual(empty.scope.observedAccounts, []);
   const configured = await (await api(request('/api/config?SOLANA_RPC_URL=https://untrusted.example'), env)).json();
   assert.equal(configured.status, 'configured');

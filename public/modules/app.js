@@ -87,7 +87,7 @@ function renderObservation(){
  $$('[data-last-checked]').forEach(n=>n.textContent=o.lastChecked?eastern(o.lastChecked):'Not checked');$$('[data-latest-event]').forEach(n=>n.textContent=o.latestEvent?eastern(o.latestEvent):'None observed');
  $$('[data-observation-mode]').forEach(n=>n.textContent=o.status==='unconfigured'?'Live observation · not configured':o.status==='live'?'Live observation · scoped':`Live observation · ${o.status}`);
  const scope=o.config?.scope;
- const note=o.status==='unconfigured'?'No target mint or observation accounts are configured. Workbench inputs and local replay remain fully available.':o.error?`${displayTimeDescription(o.error)} Previous inputs and their actual timestamps are retained. No failed check is treated as zero activity.`:`${scope?.description||'Only the configured accounts are observed.'} Coverage: ${o.coverage||'pending'}. ${o.pending?.count||0} unresolved transaction(s).`;
+ const note=o.status==='unconfigured'?'Live observation scope is not configured. Workbench inputs and local replay remain fully available.':o.error?`${displayTimeDescription(o.error)} Previous inputs and their actual timestamps are retained. No failed check is treated as zero activity.`:`${scope?.description||'Only the configured accounts are observed.'} Coverage: ${o.coverage||'pending'}. ${o.pending?.count||0} unresolved transaction(s).`;
  $('#coverageNote').textContent=note;$('#visualScope').textContent=note;
  timeline($('#homeTimeline'),currentTrace());renderToken();if(S.context==='live')renderStage();else renderUnified();renderEvents();
 }
@@ -267,11 +267,11 @@ function renderUnified(){
  const trace=currentTrace();const m=dashboard.update(trace,instrumentOptions());
  if(S.page==='runtime')runtime?.update(trace,m,{selected:S.selected,playback:S.playback,context:S.context});
  $('#contextMode').textContent=S.context==='replay'?'HISTORICAL REPLAY'+(trace?.source.mode==='example'?' / EXAMPLE':''):S.context==='example'?'EXAMPLE INPUTS':'LIVE OBSERVATION';
- $('#contextWindow').textContent=trace?formatEasternRange(trace.window.start,trace.window.end):'No verified window · target not configured';
+ $('#contextWindow').textContent=trace?formatEasternRange(trace.window.start,trace.window.end):'No verified window · observation scope not configured';
  $('#contextSelection').textContent=`${COMPONENTS.find(c=>c.id===S.selected)?.name.toUpperCase()} / ${m.selection.rangeActive?formatEasternRange(m.range.start,m.range.end,{offset:false}):'FULL WINDOW'}`;
  $('#returnLive').classList.toggle('active',S.context==='live');$('#footerMode').textContent=$('#contextMode').textContent;
  $('#heroWindow').textContent=trace?`${trace.window.durationMs/1000}s / ET`:'60s / ET';$('#heroCounts').textContent=trace?`${trace.count} / ${trace.filtered.length}`:'— / —';$('#heroPath').textContent=trace?.path||'PENDING';
- $('#heroSourceNote').textContent=trace?`${m.source.label} · ${trace.source.label} · ${m.coverage.complete?'complete window':'incomplete coverage'}`:'Live scope: supply a target mint and observation accounts. Local examples remain available.';
+ $('#heroSourceNote').textContent=trace?`${m.source.label} · ${trace.source.label} · ${m.coverage.complete?'complete window':'incomplete coverage'}`:'Live observation scope is not configured. Local examples remain available.';
  $('#rackSelection').textContent=COMPONENTS.find(c=>c.id===S.selected)?.name||'Sensor';$('#rackPath').textContent=trace?.path||'PENDING';$('#circuitRules').textContent=trace?.rulesVersion||RULES.version;
  $$('[data-observation-mode]').forEach(n=>n.textContent=m.source.label+(trace?' / '+trace.source.scopeId:''));
  timeline($('#homeTimeline'),trace);
