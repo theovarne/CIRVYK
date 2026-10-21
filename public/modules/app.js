@@ -5,7 +5,7 @@ import {mountSourceWorkspace} from './source-workspace.js';
 import {mountWorkbench,buildWorkbenchTrace} from './workbench.js';
 import {BRAND_NAME,SITE,pageTitle} from '../config/site.js';
 import {RULES, COMPONENTS, finalizeWindow, buildExample, validateTrace, stableStringify} from './engine.js';
-import {loadTraces,saveTrace,removeTrace,exportTrace,importTrace,MEMORY_KEY,MEMORY_LIMITS,assertUniqueImportIds,summarizeImportResult} from './memory.js';
+import {loadTraces,saveTrace,removeTrace,exportTrace,prepareTraceImport,MEMORY_KEY,MEMORY_LIMITS} from './memory.js';
 import {CircuitRenderer} from './renderer.js';
 import {ObservationStore} from './observation-store.js';
 import {createWalletController,isPublicAddress} from './wallet.js';
@@ -173,9 +173,9 @@ function readProvenance(key){
 function syncSavedMemory(refreshView=false){
  const latest=loadTraces();if(latest.error){notify(latest.error);return false;}
  const previous=S.activeTrace;S.saved=latest.traces;S.importedIds=readProvenance(PROVENANCE_KEY);S.observedIds=readProvenance(TRUSTED_KEY);
- const selected=S.detailId?S.saved.find(t=>t.id===S.detailId):null,removed=!!S.detailId&&!selected;
+ const selectedId=S.detailId||(S.context==='replay'?previous?.id:null),selected=selectedId?S.saved.find(t=>t.id===selectedId):null,removed=!!selectedId&&!selected;
  if(removed){resetPlayback(false);S.detailId=null;S.activeTrace=null;S.context=S.observation?.config?.status==='configured'?'live':'example';S.selectedEvent=null;S.rangeStart=null;S.rangeEnd=null;S.rangeTraceId=null;$('#eventDetail').hidden=true;$('#memoryDetail').hidden=true;}
- else if(selected&&S.context==='replay'){S.activeTrace=selected;if(previous&&stableStringify(previous)!==stableStringify(selected))resetPlayback(false);}
+ else if(selected&&S.context==='replay'){S.activeTrace=selected;if(previous&&stableStringify(previous)!==stableStringify(selected)){S.selectedEvent=null;S.rangeStart=null;S.rangeEnd=null;S.rangeTraceId=null;$('#eventDetail').hidden=true;resetPlayback(false);}}
  if(refreshView){renderMemory();if(removed&&S.page==='memory')go('#memory');else{renderStage();renderPlayback();renderEvents();}}
  return true;
 }
@@ -184,10 +184,11 @@ addEventListener('storage',handleStorageChange);
 function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
 function exportSavedMemory(){if(!syncSavedMemory(true))return;if(!S.saved.length){notify('No saved traces to export.');return;}download(new Blob([JSON.stringify({schema:'circuit.memory.v1',traces:S.saved})],{type:'application/json'}),`${BRAND_NAME.toLowerCase()}-saved-traces.json`);notify(`${S.saved.length} saved Trace(s) exported as JSON.`);}
 $('#exportAll').onclick=exportSavedMemory;
-$('#importTrace').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>MEMORY_LIMITS.maxBytes)throw new Error('Import exceeds the 3 MB limit.');const text=await file.text(),parsed=JSON.parse(text);let traces;if(parsed?.schema==='circuit.memory.v1'){if(Object.keys(parsed).sort().join(',')!=='schema,traces'||!Array.isArray(parsed.traces)||parsed.traces.length>30)throw new Error('Invalid saved-traces file.');traces=parsed.traces;}else traces=[parsed];if(!traces.length)throw new Error('This file contains no traces.');assertUniqueImportIds(traces);for(const trace of traces){const validation=validateTrace(trace);if(!validation.valid)throw new Error(validation.errors.join(' '));}
- if(!syncSavedMemory())throw new Error('Refresh local memory before importing.');const previousTraces=[...S.saved];const old=localStorage.getItem(MEMORY_KEY),oldImported=localStorage.getItem(PROVENANCE_KEY),oldObserved=localStorage.getItem(TRUSTED_KEY),nextImported=new Set([...S.importedIds,...traces.map(t=>t.id)]),nextObserved=new Set([...S.observedIds].filter(id=>!traces.some(t=>t.id===id)));
- try{localStorage.setItem(PROVENANCE_KEY,JSON.stringify([...nextImported]));localStorage.setItem(TRUSTED_KEY,JSON.stringify([...nextObserved]));for(const trace of traces){const result=saveTrace(trace);if(result.error)throw new Error(result.error);}}catch(error){for(const [key,value] of [[MEMORY_KEY,old],[PROVENANCE_KEY,oldImported],[TRUSTED_KEY,oldObserved]]){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value);}catch{}}throw error;}
- S.saved=loadTraces().traces;S.importedIds=nextImported;S.observedIds=nextObserved;saveProvenance();renderMemory();const summary=summarizeImportResult(traces,previousTraces,S.saved);notify(`${summary.retainedIds.length} / ${traces.length} validated Trace(s) retained in this browser.${summary.notRetainedIds.length?` ${summary.notRetainedIds.length} older imported record(s) not retained by the storage limits.`:''}${summary.evictedIds.length?` ${summary.evictedIds.length} previous record(s) removed by the storage limits.`:''}`);go(summary.retainedIds.length?`#memory/${encodeURIComponent(summary.retainedIds[0])}`:'#memory');
+$('#importTrace').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>MEMORY_LIMITS.maxBytes)throw new Error('Import exceeds the 3 MB limit.');const text=await file.text(),parsed=JSON.parse(text);let traces;if(parsed?.schema==='circuit.memory.v1'){if(Object.keys(parsed).sort().join(',')!=='schema,traces'||!Array.isArray(parsed.traces)||parsed.traces.length>30)throw new Error('Invalid saved-traces file.');traces=parsed.traces;}else traces=[parsed];if(!traces.length)throw new Error('This file contains no traces.');
+ if(!syncSavedMemory())throw new Error('Refresh local memory before importing.');const plan=prepareTraceImport(traces,S.saved),retained=new Set(plan.traces.map(t=>t.id)),incoming=new Set(traces.map(t=>t.id));
+ const old=localStorage.getItem(MEMORY_KEY),oldImported=localStorage.getItem(PROVENANCE_KEY),oldObserved=localStorage.getItem(TRUSTED_KEY),nextImported=new Set([...S.importedIds,...incoming].filter(id=>retained.has(id))),nextObserved=new Set([...S.observedIds].filter(id=>retained.has(id)&&!incoming.has(id)));
+ try{localStorage.setItem(PROVENANCE_KEY,JSON.stringify([...nextImported]));localStorage.setItem(TRUSTED_KEY,JSON.stringify([...nextObserved]));localStorage.setItem(MEMORY_KEY,plan.serialized);}catch(error){let rollbackFailed=false;for(const [key,value] of [[MEMORY_KEY,old],[PROVENANCE_KEY,oldImported],[TRUSTED_KEY,oldObserved]]){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value);}catch{rollbackFailed=true;}}if(rollbackFailed){syncSavedMemory(true);throw new Error(`${error.message} Previous storage could not be fully restored. Reopen Memory before continuing.`);}throw error;}
+ S.saved=plan.traces;S.importedIds=nextImported;S.observedIds=nextObserved;renderMemory();notify(`${plan.retainedIds.length} / ${traces.length} validated Trace(s) retained in this browser.${plan.notRetainedIds.length?` ${plan.notRetainedIds.length} older imported record(s) not retained by the storage limits.`:''}${plan.evictedIds.length?` ${plan.evictedIds.length} previous record(s) removed by the storage limits.`:''}`);go(plan.retainedIds.length?`#memory/${encodeURIComponent(plan.retainedIds[0])}`:'#memory');
  }catch(error){notify(`Import rejected: ${error.message}`);}finally{e.target.value='';}};
 async function exportSnapshot(t){try{notify('Preparing Snapshot…');await renderer.ready;if(renderer.error)throw new Error('Circuit graphic is unavailable.');renderer.setResult(t);const svg=renderer.snapshotSvg(),image=new Image();const uri=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));try{await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error('Circuit image could not be rendered.'));image.src=uri;});const canvas=document.createElement('canvas');canvas.width=1600;canvas.height=1120;const c=canvas.getContext('2d');c.fillStyle='#020504';c.fillRect(0,0,1600,1120);c.fillStyle='#dce5e0';c.font='38px sans-serif';c.fillText(BRAND_NAME,55,70);c.font='16px monospace';c.fillStyle='#83948d';c.fillText(`${traceLabel(t).toUpperCase()} / SAVED TRACE SNAPSHOT`,55,108);c.fillStyle='#000000';c.fillRect(55,140,1490,720);const scale=Math.min(1490/image.naturalWidth,720/image.naturalHeight),w=image.naturalWidth*scale,h=image.naturalHeight*scale;c.drawImage(image,55+(1490-w)/2,140+(720-h)/2,w,h);c.fillStyle='#dce5e0';c.font='22px monospace';c.fillText(formatEasternRange(t.window.start,t.window.end,{offset:false}),55,910);c.font='18px monospace';c.fillText(`${t.count} valid inputs / ${t.filtered.length} filtered / ${t.path||t.status.toUpperCase()}`,55,957);c.fillText(`Rules: ${t.rulesVersion} / Source: ${t.source.label.slice(0,65)}`,55,997);c.font='15px monospace';c.fillStyle='#83948d';c.fillText(`Scope: ${t.source.scopeId} / ${t.source.network}`,55,1038);c.fillText('Browser-local record. Deterministic display rules. No public record link is implied.',55,1077);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('The browser could not export this image.');download(blob,`${BRAND_NAME.toLowerCase()}-snapshot-${t.id}.png`);notify('Snapshot PNG download started.');}finally{URL.revokeObjectURL(uri);renderStage();}}catch(error){notify(`Snapshot failed: ${error.message}`);}}
 function renderEvents(){
@@ -207,6 +208,9 @@ $('#eventsBody').onclick=e=>{const id=e.target.closest('[data-model-event]')?.da
 
 let walletBusy = false, walletUIReady = false, walletAction = 0;
 const walletLogo = brand => ({okx:'okx.png',phantom:'phantom.svg',backpack:'backpack.png',coinbase:'coinbase.svg',solflare:'solflare.svg'}[brand]);
+function invalidateFilteredInspection(){
+ resetPlayback(false);workbench?.pause();S.selectedEvent=null;$('#eventDetail').hidden=true;
+}
 function syncWalletLabel(){
  $('#walletLabel').textContent=wallet.address?short(wallet.address,4):S.filterAddress?'Address filter':'Connect wallet';
  $('#walletOpen').classList.toggle('connected',Boolean(wallet.address));
@@ -218,6 +222,7 @@ function syncWalletLabel(){
 const wallet=createWalletController({
  onChange:address=>{
   S.filterAddress=address||'';$('#walletAddress').value=address||'';$('#eventAddress').value=address||'';S.filter.address=address||'';
+  invalidateFilteredInspection();
   syncWalletLabel();renderUnified();renderEvents();renderWallets();
  },
  onMessage:message=>{$('#walletStatus').textContent=message;},
@@ -244,7 +249,7 @@ $('#walletDisconnect').onclick=()=>{walletAction++;walletBusy=false;void wallet.
 $('#useWalletAddress').onclick=()=>{
  const address=$('#walletAddress').value.trim();if(!isPublicAddress(address)){$('#walletStatus').textContent='Enter a valid 32-byte Solana public address.';return;}
  walletAction++;walletBusy=false;if(wallet.address)void wallet.disconnect({silent:true});else wallet.cancelPending();
- S.filter.address=address;S.filterAddress=address;$('#walletAddress').value=address;$('#eventAddress').value=address;syncWalletLabel();
+ S.filter.address=address;S.filterAddress=address;$('#walletAddress').value=address;$('#eventAddress').value=address;invalidateFilteredInspection();syncWalletLabel();
  $('#walletDialog').close();go('#live');renderUnified();renderEvents();notify('Public address filter applied to observed records only.');
 };
 for(const [id,name] of [['projectX','X'],['projectGithub','GitHub']]){const link=SITE.links.social.find(link=>link.name===name);if(link)$('#'+id).href=link.url;}

@@ -9,5 +9,5 @@ export const SITE = Object.freeze({
   token: { name: null, ticker: null, mint: null, network: 'mainnet-beta' },
   links: { social: [{ name: 'X', url: 'https://x.com/CIRVYK' }, { name: 'GitHub', url: 'https://github.com/theovarne/CIRVYK' }], trade: null, explorer: 'https://explorer.solana.com' },
   observation: { source: 'Solana JSON-RPC', pollMs: 15000, accounts: [], retainedInputs: 4000 },
-  canonical: 'https://circuit-living-v11.vercel.app',
+  canonical: 'https://www.cirvyk.xyz',
 });

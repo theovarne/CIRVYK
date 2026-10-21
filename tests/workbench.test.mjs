@@ -191,6 +191,13 @@ test('mounted Workbench displays Eastern window and waveform dates without shift
   assert.equal(bench.getTrace().id,'trace-4b3e7836fc74f16c');
 });
 
+test('mobile heading retains word separation when its desktop line break is hidden',t=>{
+  const {root}=mountedBench(t);
+  const heading=root.innerHTML.match(/<h2>([\s\S]*?)<\/h2>/)?.[1];
+  assert.ok(heading?.includes('<br>'),'the existing desktop line break remains');
+  assert.equal(heading.replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(),'Shape a signal. Inspect its route.');
+});
+
 test('mounted speed changes replace the pending timer without changing Trace data', t => {
   const { bench, tick, input, pending } = mountedBench(t), before = bench.getTrace();
   bench.play(); tick(500); input('speed', 4);

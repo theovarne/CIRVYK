@@ -7,9 +7,60 @@ import { generatePublicSource } from './generate-public-source.mjs';
 import { syncBrand } from './sync-brand.mjs';
 import { BRAND_NAME } from '../public/config/site.js';
 
+export const SEVEN_FIXES_BASE_COMMIT = '34efdacc6d1d831a9e8f7fb2d04a3a2055d43a3c';
+export const HOST_MANAGED_METADATA = new Set(['.gitignore', '.env.example', '.vercelignore', 'vercel.json']);
+export const SEVEN_FIXES_ALLOWED_PATHS = new Set([
+  'public/modules/app.js', 'public/modules/memory.js', 'public/modules/dashboard.js',
+  'public/modules/workbench.js', 'public/styles.css', 'public/workbench.css',
+  'public/index.html', 'public/config/site.js', 'public/source-manifest.json',
+  'scripts/sync-brand.mjs', 'scripts/verify-port.mjs', 'README.md', 'DEPLOYMENT.md',
+  'docs/development.md', 'docs/media/cirvyk-header.jpg',
+  'docs/media/cirvyk-overview.jpg', 'docs/media/cirvyk-inspector.jpg',
+]);
+export function isSevenFixesPath(relative) {
+  return typeof relative === 'string' && !path.isAbsolute(relative)
+    && !relative.split('/').some(part => !part || part === '..' || part.startsWith('.'))
+    && (SEVEN_FIXES_ALLOWED_PATHS.has(relative) || /^tests\/[\w./-]+\.mjs$/.test(relative));
+}
+
+async function verifyDigest(root, entry, description) {
+  assert.ok(typeof entry.path === 'string' && !path.isAbsolute(entry.path)
+    && !entry.path.split('/').some(part => !part || part === '..' || part.startsWith('.')), `Invalid reviewed path: ${entry.path}`);
+  assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+  assert.ok(Number.isSafeInteger(entry.bytes) && entry.bytes >= 0, `Invalid reviewed size: ${entry.path}`);
+  const filename = path.join(root, entry.path);
+  const info = await fs.lstat(filename);
+  assert.ok(info.isFile() && !info.isSymbolicLink(), `Only regular reviewed files are allowed: ${entry.path}`);
+  const bytes = await fs.readFile(filename);
+  assert.equal(bytes.length, entry.bytes, `${description} size: ${entry.path}`);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `${description}: ${entry.path}`);
+}
+
 export async function verifyPort(root = fileURLToPath(new URL('../', import.meta.url))) {
   const provenance = JSON.parse(await fs.readFile(path.join(root, 'provenance.json'), 'utf8'));
   assert.equal(provenance.sourceCommit, 'a11f3f07d0faccf699a2772a47c70767b4cad3a0');
+  const latest = provenance.sevenFixes;
+  assert.equal(latest?.baseCommit, SEVEN_FIXES_BASE_COMMIT, 'Seven-fix review must retain the accepted baseline');
+  assert.equal(latest?.canonical, 'https://www.cirvyk.xyz');
+  assert.ok(Array.isArray(latest.changes) && latest.changes.length > 0, 'Seven fixes require an explicit reviewed change list');
+  assert.ok(Array.isArray(latest.protectedFiles) && latest.protectedFiles.length > 0, 'Seven fixes must protect the existing implementation');
+  const sevenReviewed = new Set();
+  for (const entry of latest.changes) {
+    assert.ok(isSevenFixesPath(entry.path), `Unreviewed seven-fix change: ${entry.path}`);
+    assert.ok(!sevenReviewed.has(entry.path), `Duplicate seven-fix change: ${entry.path}`);
+    assert.ok(entry.previousSha256 === null || /^[a-f0-9]{64}$/.test(entry.previousSha256), `Invalid seven-fix baseline digest: ${entry.path}`);
+    sevenReviewed.add(entry.path);
+    await verifyDigest(root, entry, 'Seven-fix reviewed bytes differ');
+  }
+  for (const required of ['scripts/verify-port.mjs', 'public/source-manifest.json']) {
+    assert.ok(sevenReviewed.has(required), `The seven-fix review must include ${required}`);
+  }
+  for (const review of [provenance.branding, provenance.palette, provenance.walletAccess, provenance.publication, provenance.logo]) {
+    for (const entry of review.protectedFiles) {
+      assert.ok(!sevenReviewed.has(entry.path), `A prior review cannot still protect an authorized seven-fix overlap: ${entry.path}`);
+      assert.ok(!HOST_MANAGED_METADATA.has(entry.path), `Host-managed metadata must not be byte-protected: ${entry.path}`);
+    }
+  }
   const publicPaths = [];
   async function walk(relative) {
     for (const entry of await fs.readdir(path.join(root, relative), { withFileTypes: true })) {
@@ -91,16 +142,12 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
     'public/modules/instruments.js', 'public/modules/source-workspace.js',
     'public/modules/workbench.js', 'public/modules/time.js', 'public/source-manifest.json',
   ]);
-  const repositoryOnlyFiles = new Set(['.gitignore', '.env.example']);
   for (const entry of provenance.publication.changes) {
     assert.ok(publicationPaths.has(entry.path), `Unreviewed publication change: ${entry.path}`);
-    let bytes;
-    try { bytes = await fs.readFile(path.join(root, entry.path)); }
-    catch (error) {
-      // Vercel excludes these repository files before executing a remote build.
-      if (error.code === 'ENOENT' && repositoryOnlyFiles.has(entry.path)) continue;
-      throw error;
-    }
+    // Preserve historical review records without hashing host-managed metadata.
+    // The existing semantic Vercel guard below remains the runtime contract.
+    if (HOST_MANAGED_METADATA.has(entry.path)) continue;
+    const bytes = await fs.readFile(path.join(root, entry.path));
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `${entry.path} differs from reviewed publication`);
   }
   for (const entry of provenance.publication.protectedFiles) {
@@ -133,18 +180,43 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
   }
   assert.deepEqual([...logoReviewed].sort(), [...logoPaths].sort(), 'Every authorized logo asset and integration must be reviewed');
   const logoProtected = new Set();
-  const hostManagedMetadata = new Set(['.gitignore', '.env.example', '.vercelignore', 'vercel.json']);
   for (const entry of provenance.logo.protectedFiles) {
     assert.ok(typeof entry.path === 'string' && !path.isAbsolute(entry.path) && !entry.path.split('/').some(part => !part || part === '..'), 'Invalid logo-protected path');
     assert.ok(!logoPaths.has(entry.path) && !logoProtected.has(entry.path), `Invalid overlapping logo protection: ${entry.path}`);
-    assert.ok(!hostManagedMetadata.has(entry.path), `Host-managed metadata must retain its existing verification contract: ${entry.path}`);
+    assert.ok(!HOST_MANAGED_METADATA.has(entry.path), `Host-managed metadata must retain its existing verification contract: ${entry.path}`);
     logoProtected.add(entry.path);
     const bytes = await fs.readFile(path.join(root, entry.path));
     assert.equal(bytes.byteLength, entry.bytes, `Logo update must preserve size: ${entry.path}`);
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `Logo update must preserve ${entry.path}`);
   }
   for (const required of [...publicPaths, 'lib/observation.mjs', 'lib/vercel-api.mjs', 'api/config.mjs', 'api/observation.mjs']) {
-    if (!logoPaths.has(required)) assert.ok(logoProtected.has(required), `Logo review must protect ${required}`);
+    if (!logoPaths.has(required) && !sevenReviewed.has(required)) assert.ok(logoProtected.has(required), `Logo review must protect ${required}`);
+  }
+  const sevenProtected = new Set();
+  for (const entry of latest.protectedFiles) {
+    assert.ok(!sevenReviewed.has(entry.path) && !sevenProtected.has(entry.path), `Invalid overlapping seven-fix protection: ${entry.path}`);
+    assert.ok(!HOST_MANAGED_METADATA.has(entry.path), `Host-managed metadata must retain semantic verification: ${entry.path}`);
+    sevenProtected.add(entry.path);
+    await verifyDigest(root, entry, 'Seven fixes must preserve implementation');
+  }
+  for (const required of [...publicPaths, 'lib/observation.mjs', 'lib/vercel-api.mjs', 'api/config.mjs', 'api/observation.mjs']) {
+    if (!sevenReviewed.has(required)) assert.ok(sevenProtected.has(required), `Seven-fix review must protect ${required}`);
+  }
+  const deployment = JSON.parse(await fs.readFile(path.join(root, 'deployment-manifest.json'), 'utf8'));
+  assert.equal(deployment.sourceCommit, provenance.sourceCommit);
+  assert.equal(deployment.staticOutput, 'public');
+  const portable = new Set();
+  for (const entry of deployment.files) {
+    assert.ok(!HOST_MANAGED_METADATA.has(entry.path), `Host-managed metadata cannot be hash-protected by the portable manifest: ${entry.path}`);
+    assert.ok(!portable.has(entry.path), `Duplicate portable file: ${entry.path}`);
+    portable.add(entry.path);
+    await verifyDigest(root, entry, 'Portable source bytes differ');
+    if (!sevenReviewed.has(entry.path) && entry.path !== 'provenance.json') {
+      assert.ok(sevenProtected.has(entry.path), `The latest review must protect portable source: ${entry.path}`);
+    }
+  }
+  for (const required of [...expected, ...sevenReviewed, 'provenance.json']) {
+    assert.ok(portable.has(required), `Portable manifest omitted ${required}`);
   }
   // Vercel rewrites its working config after upload. Protect its runtime contract,
   // while byte hashes above continue to cover the shipped assets and API sources.
@@ -159,7 +231,7 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
   const shipped = JSON.parse(await fs.readFile(path.join(root, 'public/source-manifest.json'), 'utf8'));
   const measured = await generatePublicSource(root, { write: false, generatedAt: shipped.generatedAt });
   assert.deepEqual(shipped, measured, 'Source must show the exact actual reviewed files and measured counts');
-  return { verifiedFiles: provenance.files.length, brand: BRAND_NAME, accent: provenance.palette.accent, paletteChanges: provenance.palette.changes.length, brandingChanges: provenance.branding.changes.map(entry => entry.path), logoChanges: logoReviewed.size, protectedFiles: logoProtected.size + 1, sourceFiles: measured.stats.files, sourceBytes: measured.stats.bytes, sourceCommit: provenance.sourceCommit };
+  return { verifiedFiles: provenance.files.length, brand: BRAND_NAME, accent: provenance.palette.accent, paletteChanges: provenance.palette.changes.length, brandingChanges: provenance.branding.changes.map(entry => entry.path), logoChanges: logoReviewed.size, sevenFixChanges: sevenReviewed.size, sevenFixProtected: sevenProtected.size, portableFiles: portable.size, protectedFiles: logoProtected.size + 1, sourceFiles: measured.stats.files, sourceBytes: measured.stats.bytes, sourceCommit: provenance.sourceCommit };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

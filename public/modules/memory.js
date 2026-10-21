@@ -38,6 +38,24 @@ export function summarizeImportResult(requested, previous, next) {
   };
 }
 
+/** Validate and merge an entire import before any storage or provenance writes. */
+export function prepareTraceImport(requested, previous) {
+  assertUniqueImportIds(requested);
+  assertUniqueImportIds(previous);
+  if (!requested.length || requested.length > MEMORY_LIMITS.maxRecords || previous.length > MEMORY_LIMITS.maxRecords) throw new TypeError('Invalid saved-traces collection.');
+  for (const trace of [...previous, ...requested]) {
+    const error = validationError(trace);
+    if (error) throw new TypeError(error);
+    if (bytes(envelope([trace])) > MEMORY_LIMITS.maxBytes) throw new TypeError('This Trace exceeds the 3 MB local memory limit.');
+  }
+  const merged = new Map(previous.map(trace => [trace.id, trace]));
+  for (const trace of requested) merged.set(trace.id, trace);
+  const traces = [...merged.values()].sort(byNewest).slice(0, MEMORY_LIMITS.maxRecords);
+  while (bytes(envelope(traces)) > MEMORY_LIMITS.maxBytes) traces.pop();
+  const summary = summarizeImportResult([...requested].sort(byNewest), previous, traces);
+  return { traces, serialized: envelope(traces), ...summary };
+}
+
 /** Browser-local records only. This function never fetches data. */
 export function loadTraces(storage) {
   try {

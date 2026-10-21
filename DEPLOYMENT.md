@@ -1,6 +1,6 @@
 # Deployment
 
-This directory is the runnable CIRVYK project root. The existing public site is [circuit-living-v11.vercel.app](https://circuit-living-v11.vercel.app/#home), and the source repository is [theovarne/CIRVYK](https://github.com/theovarne/CIRVYK). The retained hosting project name is a technical identifier, not an alternative public brand.
+This directory is the runnable CIRVYK project root. The public site is [www.cirvyk.xyz](https://www.cirvyk.xyz/#home), and the source repository is [theovarne/CIRVYK](https://github.com/theovarne/CIRVYK). The retained hosting project name is a technical identifier, not an alternative public brand.
 
 ## Vercel configuration
 

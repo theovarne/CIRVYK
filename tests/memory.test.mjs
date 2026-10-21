@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildExample, finalizeWindow, RULES } from '../public/modules/engine.js';
-import { MEMORY_KEY, MEMORY_LIMITS, loadTraces, saveTrace, removeTrace, exportTrace, importTrace, assertUniqueImportIds, summarizeImportResult } from '../public/modules/memory.js';
+import { MEMORY_KEY, MEMORY_LIMITS, loadTraces, saveTrace, removeTrace, exportTrace, importTrace, assertUniqueImportIds, summarizeImportResult, prepareTraceImport } from '../public/modules/memory.js';
 
 class Storage {
   values = new Map();
@@ -159,4 +159,44 @@ test('batch summary distinguishes retained upserts from removed previous records
     retainedIds: [first.id, third.id], notRetainedIds: [], evictedIds: [second.id],
   });
   assert.throws(() => assertUniqueImportIds([{}]), /valid ID/);
+});
+
+test('whole-batch planning is independent of import order at the record limit', () => {
+  const previous = Array.from({length: 29}, (_, index) => makeTrace(index + 1));
+  const incoming = [makeTrace(0), makeTrace(30)], before = JSON.stringify({previous, incoming});
+  const first = prepareTraceImport(incoming, previous);
+  const reversed = prepareTraceImport([...incoming].reverse(), previous);
+  assert.deepEqual(first, reversed);
+  assert.equal(first.traces.length, 30);
+  assert.deepEqual(first.retainedIds, [incoming[1].id]);
+  assert.deepEqual(first.notRetainedIds, [incoming[0].id]);
+  assert.equal(first.traces[0].id, incoming[1].id);
+  assert.equal(JSON.stringify({previous, incoming}), before);
+});
+
+test('whole-batch planning applies the byte limit once and reports discarded inputs consistently', () => {
+  const storage = new Storage(), request = buildExample('single');
+  const heavy = offset => {
+    const start = request.windowStart + offset * RULES.windowMs;
+    return finalizeWindow({...request, baseline: [], windowStart: start, now: start + RULES.windowMs,
+      inputs: Array.from({length: 600}, (_, index) => ({...request.inputs[0], id: `large-${index}`, address: 'A'.repeat(256), timestamp: start + index * 80}))});
+  };
+  for (let index = 1; index <= 9; index++) assert.equal(saveTrace(heavy(index), storage).error, null);
+  const previous = loadTraces(storage).traces, raw = storage.getItem(MEMORY_KEY);
+  const incoming = [heavy(0), heavy(10)];
+  const first = prepareTraceImport(incoming, previous), reversed = prepareTraceImport([...incoming].reverse(), previous);
+  assert.deepEqual(first, reversed);
+  assert.ok(new TextEncoder().encode(first.serialized).byteLength <= MEMORY_LIMITS.maxBytes);
+  assert.equal(first.traces[0].id, incoming[1].id);
+  assert.ok(first.notRetainedIds.includes(incoming[0].id));
+  assert.equal(storage.getItem(MEMORY_KEY), raw);
+});
+
+test('whole-batch planning rejects duplicates or any invalid record without changing its inputs', () => {
+  const previous = [makeTrace(1)], valid = makeTrace(2), invalid = {...makeTrace(3), count: 99};
+  const before = JSON.stringify(previous);
+  assert.throws(() => prepareTraceImport([valid, {...valid}], previous), /duplicate Trace IDs/);
+  assert.throws(() => prepareTraceImport([valid, invalid], previous), /deterministic engine/);
+  assert.throws(() => prepareTraceImport([], previous), /Invalid saved-traces/);
+  assert.equal(JSON.stringify(previous), before);
 });

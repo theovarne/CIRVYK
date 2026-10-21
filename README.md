@@ -8,7 +8,7 @@ CIRVYK is a circuit-based interface for observing a defined slice of Solana toke
 
 Inspect a component, follow a signal through its path, and revisit the Trace produced by a processing window.
 
-[Preview](https://circuit-living-v11.vercel.app/#home) · [Protocol](docs/protocol.md) · [Development](docs/development.md)
+[Website](https://www.cirvyk.xyz/#home) · [Protocol](docs/protocol.md) · [Development](docs/development.md)
 
 ## Overview
 
