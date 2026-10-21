@@ -23,6 +23,21 @@ export function isSevenFixesPath(relative) {
     && (SEVEN_FIXES_ALLOWED_PATHS.has(relative) || /^tests\/[\w./-]+\.mjs$/.test(relative));
 }
 
+export const RUNTIME_BASE_COMMIT = 'fa6015263263f9056c5083e41d6ca12110d30839';
+export const RUNTIME_ALLOWED_PATHS = new Set([
+  'public/modules/runtime.js', 'public/runtime.css', 'public/assets/runtime-components.svg',
+  'public/modules/app.js', 'public/modules/source-workspace.js', 'public/index.html', 'public/config/site.js',
+  'public/source-manifest.json', 'scripts/verify-port.mjs',
+  'scripts/generate-public-source.mjs', 'README.md', 'docs/media/cirvyk-runtime.jpg',
+  'tests/runtime.test.mjs', 'tests/app-interactions.test.mjs', 'tests/vercel-adapter.test.mjs',
+  'tests/source-workspace.test.mjs',
+]);
+export function isRuntimePath(relative) {
+  return typeof relative === 'string' && !path.isAbsolute(relative)
+    && !relative.split('/').some(part => !part || part === '..' || part.startsWith('.'))
+    && RUNTIME_ALLOWED_PATHS.has(relative);
+}
+
 async function verifyDigest(root, entry, description) {
   assert.ok(typeof entry.path === 'string' && !path.isAbsolute(entry.path)
     && !entry.path.split('/').some(part => !part || part === '..' || part.startsWith('.')), `Invalid reviewed path: ${entry.path}`);
@@ -39,6 +54,34 @@ async function verifyDigest(root, entry, description) {
 export async function verifyPort(root = fileURLToPath(new URL('../', import.meta.url))) {
   const provenance = JSON.parse(await fs.readFile(path.join(root, 'provenance.json'), 'utf8'));
   assert.equal(provenance.sourceCommit, 'a11f3f07d0faccf699a2772a47c70767b4cad3a0');
+  const runtime = provenance.runtimeFeature;
+  const runtimeReviewed = new Set();
+  if (runtime) {
+    assert.equal(runtime.baseCommit, RUNTIME_BASE_COMMIT, 'Runtime review must retain the accepted CIRVYK baseline');
+    assert.equal(runtime.canonical, 'https://www.cirvyk.xyz');
+    assert.match(runtime.baselineSnapshotSha256, /^[a-f0-9]{64}$/);
+    assert.ok(Array.isArray(runtime.changes) && runtime.changes.length > 0, 'Runtime additions require an explicit reviewed change list');
+    assert.ok(Array.isArray(runtime.protectedFiles) && runtime.protectedFiles.length > 0, 'Runtime additions must protect the existing implementation');
+    for (const entry of runtime.changes) {
+      assert.ok(isRuntimePath(entry.path), `Unreviewed runtime change: ${entry.path}`);
+      assert.ok(!runtimeReviewed.has(entry.path), `Duplicate runtime change: ${entry.path}`);
+      assert.ok(entry.previousSha256 === null || /^[a-f0-9]{64}$/.test(entry.previousSha256), `Invalid runtime baseline digest: ${entry.path}`);
+      runtimeReviewed.add(entry.path);
+      await verifyDigest(root, entry, 'Runtime reviewed bytes differ');
+    }
+    for (const required of ['public/modules/runtime.js', 'public/runtime.css', 'public/assets/runtime-components.svg',
+      'public/modules/app.js', 'public/index.html', 'public/config/site.js',
+      'public/source-manifest.json', 'scripts/verify-port.mjs', 'tests/runtime.test.mjs',
+      'docs/media/cirvyk-runtime.jpg']) {
+      assert.ok(runtimeReviewed.has(required), `The runtime review must include ${required}`);
+    }
+    for (const review of [provenance.branding, provenance.palette, provenance.walletAccess,
+      provenance.publication, provenance.logo, provenance.sevenFixes]) {
+      for (const entry of review.protectedFiles) {
+        assert.ok(!runtimeReviewed.has(entry.path), `A prior review cannot still protect an authorized runtime overlap: ${entry.path}`);
+      }
+    }
+  }
   const latest = provenance.sevenFixes;
   assert.equal(latest?.baseCommit, SEVEN_FIXES_BASE_COMMIT, 'Seven-fix review must retain the accepted baseline');
   assert.equal(latest?.canonical, 'https://www.cirvyk.xyz');
@@ -190,7 +233,7 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, `Logo update must preserve ${entry.path}`);
   }
   for (const required of [...publicPaths, 'lib/observation.mjs', 'lib/vercel-api.mjs', 'api/config.mjs', 'api/observation.mjs']) {
-    if (!logoPaths.has(required) && !sevenReviewed.has(required)) assert.ok(logoProtected.has(required), `Logo review must protect ${required}`);
+    if (!logoPaths.has(required) && !sevenReviewed.has(required) && !runtimeReviewed.has(required)) assert.ok(logoProtected.has(required), `Logo review must protect ${required}`);
   }
   const sevenProtected = new Set();
   for (const entry of latest.protectedFiles) {
@@ -200,7 +243,7 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
     await verifyDigest(root, entry, 'Seven fixes must preserve implementation');
   }
   for (const required of [...publicPaths, 'lib/observation.mjs', 'lib/vercel-api.mjs', 'api/config.mjs', 'api/observation.mjs']) {
-    if (!sevenReviewed.has(required)) assert.ok(sevenProtected.has(required), `Seven-fix review must protect ${required}`);
+    if (!sevenReviewed.has(required) && !runtimeReviewed.has(required)) assert.ok(sevenProtected.has(required), `Seven-fix review must protect ${required}`);
   }
   const deployment = JSON.parse(await fs.readFile(path.join(root, 'deployment-manifest.json'), 'utf8'));
   assert.equal(deployment.sourceCommit, provenance.sourceCommit);
@@ -211,12 +254,29 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
     assert.ok(!portable.has(entry.path), `Duplicate portable file: ${entry.path}`);
     portable.add(entry.path);
     await verifyDigest(root, entry, 'Portable source bytes differ');
-    if (!sevenReviewed.has(entry.path) && entry.path !== 'provenance.json') {
+    if (!sevenReviewed.has(entry.path) && !runtimeReviewed.has(entry.path) && entry.path !== 'provenance.json') {
       assert.ok(sevenProtected.has(entry.path), `The latest review must protect portable source: ${entry.path}`);
     }
   }
-  for (const required of [...expected, ...sevenReviewed, 'provenance.json']) {
+  for (const required of [...expected, ...sevenReviewed, ...runtimeReviewed, 'provenance.json']) {
     assert.ok(portable.has(required), `Portable manifest omitted ${required}`);
+  }
+  const runtimeProtected = new Set();
+  if (runtime) {
+    for (const entry of runtime.protectedFiles) {
+      assert.ok(!runtimeReviewed.has(entry.path) && !runtimeProtected.has(entry.path), `Invalid overlapping runtime protection: ${entry.path}`);
+      assert.ok(!HOST_MANAGED_METADATA.has(entry.path), `Host-managed metadata must retain semantic verification: ${entry.path}`);
+      runtimeProtected.add(entry.path);
+      await verifyDigest(root, entry, 'Runtime additions must preserve implementation');
+    }
+    for (const required of portable) {
+      if (!runtimeReviewed.has(required) && required !== 'provenance.json') {
+        assert.ok(runtimeProtected.has(required), `Runtime review must protect portable source: ${required}`);
+      }
+    }
+    for (const reviewed of [...runtimeReviewed, ...runtimeProtected]) {
+      assert.ok(portable.has(reviewed), `The portable manifest must include runtime-reviewed file: ${reviewed}`);
+    }
   }
   // Vercel rewrites its working config after upload. Protect its runtime contract,
   // while byte hashes above continue to cover the shipped assets and API sources.
@@ -231,7 +291,7 @@ export async function verifyPort(root = fileURLToPath(new URL('../', import.meta
   const shipped = JSON.parse(await fs.readFile(path.join(root, 'public/source-manifest.json'), 'utf8'));
   const measured = await generatePublicSource(root, { write: false, generatedAt: shipped.generatedAt });
   assert.deepEqual(shipped, measured, 'Source must show the exact actual reviewed files and measured counts');
-  return { verifiedFiles: provenance.files.length, brand: BRAND_NAME, accent: provenance.palette.accent, paletteChanges: provenance.palette.changes.length, brandingChanges: provenance.branding.changes.map(entry => entry.path), logoChanges: logoReviewed.size, sevenFixChanges: sevenReviewed.size, sevenFixProtected: sevenProtected.size, portableFiles: portable.size, protectedFiles: logoProtected.size + 1, sourceFiles: measured.stats.files, sourceBytes: measured.stats.bytes, sourceCommit: provenance.sourceCommit };
+  return { verifiedFiles: provenance.files.length, brand: BRAND_NAME, accent: provenance.palette.accent, paletteChanges: provenance.palette.changes.length, brandingChanges: provenance.branding.changes.map(entry => entry.path), logoChanges: logoReviewed.size, sevenFixChanges: sevenReviewed.size, sevenFixProtected: sevenProtected.size, runtimeChanges: runtimeReviewed.size, runtimeProtected: runtimeProtected.size, portableFiles: portable.size, protectedFiles: logoProtected.size + 1, sourceFiles: measured.stats.files, sourceBytes: measured.stats.bytes, sourceCommit: provenance.sourceCommit };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

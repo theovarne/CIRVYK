@@ -28,8 +28,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8357,
-      "sha256": "875a139900c9fdca4abc221ed894cda6cf99584152a1178a33f6fcedddaa8476"
+      "bytes": 8773,
+      "sha256": "b24fe7df2938027812e0203b3237c6ea18a29b0815a26d485f8a88670b9a889c"
     },
     {
       "path": "api/config.mjs",
@@ -82,6 +82,11 @@
       "sha256": "55da2dc42e4503081cd7614cd852009cbc43606aa5ab21d5a5d68dc0e3f63d31"
     },
     {
+      "path": "docs/media/cirvyk-runtime.jpg",
+      "bytes": 177555,
+      "sha256": "76aebc2445decc06652a5b15fc5c01644545502f034311fa9cf17103b1f1b0b7"
+    },
+    {
       "path": "docs/protocol.md",
       "bytes": 11397,
       "sha256": "5f181e75911486f5ee7704a938cc819398b29b19a07cd9e9e0906461140d140c"
@@ -113,8 +118,8 @@
     },
     {
       "path": "provenance.json",
-      "bytes": 67369,
-      "sha256": "636b5a3728ae12544bde50f0f072e29bbed755167292c65d79aa51598539bfdb"
+      "bytes": 84328,
+      "sha256": "c42e957677e65c37fd0076696a22811ade202096bb0082619464880d19ff4723"
     },
     {
       "path": "public/assets/brand/apple-touch-icon.png",
@@ -182,6 +187,11 @@
       "sha256": "98272f3512338c52940816f5db61966ca1cdbc3cdb3c0d981da22612723da59e"
     },
     {
+      "path": "public/assets/runtime-components.svg",
+      "bytes": 289244,
+      "sha256": "48b8c0180ec14a2ffb10e71170cb452c67db7fafb5560a588881270fc80d6284"
+    },
+    {
       "path": "public/assets/social-github.svg",
       "bytes": 1563,
       "sha256": "3c7623c48d90002f42a5f227cc824c8c9caedfc9e4cff593c0e5b95318796ae1"
@@ -228,8 +238,8 @@
     },
     {
       "path": "public/config/site.js",
-      "bytes": 1074,
-      "sha256": "2bedbd8c4633c9c1aec026d0db5adfc507975531c7e14643652a52d5935a2a3e"
+      "bytes": 1094,
+      "sha256": "28f15ebe41443acef9d3fb8c3d19c21d4062d47b6ddcb75582a86dee1483f19c"
     },
     {
       "path": "public/favicon.ico",
@@ -253,13 +263,13 @@
     },
     {
       "path": "public/index.html",
-      "bytes": 37677,
-      "sha256": "a18b6565976966bb48a54050d93029cf59ea270178815c7ab76dfcc907e02b87"
+      "bytes": 37866,
+      "sha256": "fcb2698d2cf5662194d88e5dc55d92dc22af8b93d9d57b05fef30c317cf04b75"
     },
     {
       "path": "public/modules/app.js",
-      "bytes": 52477,
-      "sha256": "2ff66afc70eee1dc3a87d4d254c6d1b575d405553c9deccedb4cbda6ad158e67"
+      "bytes": 53035,
+      "sha256": "281703ef6c7a0fe45a2396e469934e998e38b9c7f9b151eb5a540bf36dc0d111"
     },
     {
       "path": "public/modules/dashboard.js",
@@ -292,9 +302,14 @@
       "sha256": "92e50d53e6e92f760f130b2e0721e28c441c0f405bbfa0c24ded516d7d1c8d9c"
     },
     {
+      "path": "public/modules/runtime.js",
+      "bytes": 17535,
+      "sha256": "02e907a4acd6ddb59a835a74312652d5e0836c4a08ee347e3111cfa45b090603"
+    },
+    {
       "path": "public/modules/source-workspace.js",
-      "bytes": 19708,
-      "sha256": "61ddab6be169261fe0662562b2b34d774dc15d8908170f2ba2033ad691c97bcd"
+      "bytes": 19759,
+      "sha256": "fa6190a357129fe47628d366e5cc3efcb2d107b3060a5996b4c7f513043f07ea"
     },
     {
       "path": "public/modules/time.js",
@@ -317,9 +332,14 @@
       "sha256": "a264c8c5c0fd2bb03f18a490ba620315bc001f8dae7950005a0af8e9785e4a30"
     },
     {
+      "path": "public/runtime.css",
+      "bytes": 12978,
+      "sha256": "e5e3e9dd5927a9ca26470b92cdfc540e414c9965997eee5cc092b16a15ca115d"
+    },
+    {
       "path": "public/source-manifest.json",
-      "bytes": 361079,
-      "sha256": "146b4de8f56919e0b08166aca8d3a577811de983ab2934cf9a932afa960c01f3"
+      "bytes": 393398,
+      "sha256": "870c5c588f7a99ab5d32a7a437caae4182348f2df63f260df726a736c4c1de8a"
     },
     {
       "path": "public/source-workspace.css",
@@ -343,8 +363,8 @@
     },
     {
       "path": "scripts/generate-public-source.mjs",
-      "bytes": 4500,
-      "sha256": "227e5739ffebbe93d7e446d5c2c2db62ded12fa1fd143ac51bb1fc5fb311489a"
+      "bytes": 4555,
+      "sha256": "2fee310e28067f0d0e3cc75df2dc6da280b62615087f6b3c8f687644fd79ecf3"
     },
     {
       "path": "scripts/sync-brand.mjs",
@@ -353,13 +373,13 @@
     },
     {
       "path": "scripts/verify-port.mjs",
-      "bytes": 16767,
-      "sha256": "e513c4281155a07ab3d64c386f600a75cb3755b24b476b9a074a25b3b5c20539"
+      "bytes": 20710,
+      "sha256": "c1692520bfd655b46570c6f6656b0e8674479479eeb6ad1f6c9bcfd8e9f6bd99"
     },
     {
       "path": "tests/app-interactions.test.mjs",
-      "bytes": 20218,
-      "sha256": "0a524fb1b130a52332ea491e21ede70696a9be0be8b149ca610c6d00ce5c28df"
+      "bytes": 20780,
+      "sha256": "8dcbc9c85b9f4a6a9a1704fa7ee0f71bb83892cb1a3a527a1ac872771fb1d2f5"
     },
     {
       "path": "tests/brand.test.mjs",
@@ -422,9 +442,14 @@
       "sha256": "69760219cd7840c46506e7b0579ced43e29b5420a9a94359048eb63fe01ce891"
     },
     {
+      "path": "tests/runtime.test.mjs",
+      "bytes": 8542,
+      "sha256": "cac1141959973c9a45392e1db0397f8069655bc05824a1911dec908d0e498895"
+    },
+    {
       "path": "tests/source-workspace.test.mjs",
       "bytes": 15191,
-      "sha256": "9fae1c6e38b899ecfb10b76bd161202a704d08e4b91aa14c92c757f8200c3e26"
+      "sha256": "c3a67ad7b6536e5c06a6f864615932ba7d4396d9bc7d05863697a0df3f08e3ee"
     },
     {
       "path": "tests/time.test.mjs",
@@ -433,8 +458,8 @@
     },
     {
       "path": "tests/vercel-adapter.test.mjs",
-      "bytes": 8318,
-      "sha256": "553e492269fef003dda11f1484fa0becbda3e0840f0f810d85b12eebee12ff34"
+      "bytes": 8481,
+      "sha256": "e3c37e7e7b708b038a1a1c79af786c4d1ceb6ab799a372a4ed22151256caee2a"
     },
     {
       "path": "tests/wallet-filter-regression.test.mjs",

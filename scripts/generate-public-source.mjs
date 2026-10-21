@@ -15,6 +15,7 @@ export const PUBLIC_SOURCE_FILES = Object.freeze([
   'public/modules/wallet.js',
   'public/modules/renderer.js',
   'public/modules/dashboard.js',
+  'public/modules/runtime.js',
   'public/modules/instruments.js',
   'public/modules/workbench.js',
   'public/modules/source-workspace.js',
@@ -30,6 +31,7 @@ export const PUBLIC_SOURCE_FILES = Object.freeze([
   'public/source-workspace.css',
   'public/fonts-local.css',
   'public/header-wallet.css',
+  'public/runtime.css',
 ]);
 const REQUIRED_FILES = new Set(['public/config/rules.js', 'public/config/site.js', 'public/modules/engine.js']);
 const MAX_FILE_BYTES = 300_000;

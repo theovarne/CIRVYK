@@ -1,7 +1,7 @@
 /** Website identity only. Token identity and observation configuration are separate. */
 export const BRAND_NAME = 'CIRVYK';
 export function pageTitle(page = 'home') {
-  const label = { live: 'Live', circuit: 'Core', memory: 'Memory', source: 'Source', workbench: 'Workbench', protocol: 'Protocol' }[page];
+  const label = { live: 'Live', runtime: 'Runtime', circuit: 'Core', memory: 'Memory', source: 'Source', workbench: 'Workbench', protocol: 'Protocol' }[page];
   return label ? `${label} | ${BRAND_NAME}` : BRAND_NAME;
 }
 export const SITE = Object.freeze({

@@ -48,6 +48,20 @@ function fixture(trace=buildWorkbenchTrace(), functions=[]) {
 }
 const playback=['playbackTrace','replayLimit','pausePlayback','renderPlayback','advance','schedulePlayback','resetPlayback'];
 
+test('Runtime replay controls refresh the shared model without a separate playback timer',()=>{
+ const f=fixture(undefined,playback);
+ f.state.page='runtime';
+ f.context.advance();
+ assert.equal(f.state.playback.step,0);
+ assert.equal(f.state.selected,'sensor');
+ assert.equal(f.renders.findLast(r=>r[0]==='dashboard')[1].metrics.acceptedCount,12);
+ f.state.playback.playing=true;
+ f.context.pausePlayback(false);
+ assert.equal(f.state.playback.playing,false);
+ assert.equal(f.timers.size,0);
+ assert.match(f.$('#routeProgress').textContent,/Step 1 \/ 6/);
+});
+
 test('selecting an Eastern time cell immediately refreshes the inspector, not just the dashboard',()=>{
  const f=fixture(undefined,['instrumentOptions','liveTimeRange','stageStatus','renderInspector',...playback,'selectTimeRange']);
  f.context.selectTimeRange(f.state.example.window.start+1000,f.state.example.window.start+2000);

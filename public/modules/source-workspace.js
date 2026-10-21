@@ -5,12 +5,12 @@ export const PUBLIC_SOURCE_PATHS = Object.freeze([
   'README.md', 'public/config/rules.js', 'public/config/site.js',
   'public/modules/engine.js', 'public/modules/memory.js',
   'public/modules/observation-store.js', 'public/modules/wallet.js',
-  'public/modules/renderer.js', 'public/modules/dashboard.js',
+  'public/modules/renderer.js', 'public/modules/dashboard.js', 'public/modules/runtime.js',
   'public/modules/instruments.js', 'public/modules/workbench.js',
   'public/modules/source-workspace.js', 'public/modules/time.js', 'docs/living-circuit.md', 'docs/protocol.md', 'docs/wallet-assets.md',
   'public/modules/app.js', 'public/index.html', 'public/styles.css',
   'public/restoration.css', 'public/workbench.css', 'public/source-workspace.css',
-  'public/fonts-local.css', 'public/header-wallet.css',
+  'public/fonts-local.css', 'public/header-wallet.css', 'public/runtime.css',
 ]);
 const MAX_FILES = 64;
 const MAX_BYTES = 2_000_000;

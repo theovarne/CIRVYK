@@ -23,7 +23,7 @@ const manifest = files => ({schema: SOURCE_SCHEMA, generatedAt: date, stats: {fi
 
 test('the build and browser use the same bounded public allowlist', () => {
   assert.deepEqual(PUBLIC_SOURCE_FILES, PUBLIC_SOURCE_PATHS);
-  assert.ok(PUBLIC_SOURCE_FILES.length <= 24);
+  assert.ok(PUBLIC_SOURCE_FILES.length <= 26);
   for (const filename of PUBLIC_SOURCE_FILES) assert.doesNotMatch(filename, /(^|\/)\.env|\.openai|\.git|observation\.mjs|api\/|server|credentials/);
 });
 
@@ -48,7 +48,7 @@ test('the public controller, page markup and every shipped stylesheet are indexe
     ['public/modules/app.js', 'javascript'], ['public/index.html', 'html'],
     ...(await fs.readdir(path.join(project, 'public'))).filter(name => name.endsWith('.css')).map(name => [`public/${name}`, 'css']),
   ];
-  assert.equal(expected.length, 8);
+  assert.equal(expected.length, 9);
   for (const [filename, language] of expected) {
     assert.ok(PUBLIC_SOURCE_FILES.includes(filename), `${filename} must be an explicit reviewed entry`);
     const file = output.files.find(file => file.path === filename);

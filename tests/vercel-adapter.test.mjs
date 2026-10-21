@@ -25,7 +25,7 @@ test('portable Vercel package preserves authorized frontend/reader bytes and rea
   assert.ok(verified.protectedFiles >= 26);
   assert.ok(verified.brandingChanges.includes('public/config/site.js'));
   assert.ok(verified.brandingChanges.includes('public/source-manifest.json'));
-  assert.equal(verified.sourceFiles, 23);
+  assert.equal(verified.sourceFiles, 25);
   assert.ok(verified.brandingChanges.includes('README.md'));
   const readme = await fs.readFile(new URL('../README.md', import.meta.url), 'utf8');
   assert.match(readme, /pnpm install --frozen-lockfile/);
@@ -36,6 +36,8 @@ test('portable Vercel package preserves authorized frontend/reader bytes and rea
   assert.doesNotMatch(readme, /pnpm dev -- --port|uses the Vinext \/ Vite hosting wrapper/);
   assert.equal(verified.sourceCommit, 'a11f3f07d0faccf699a2772a47c70767b4cad3a0');
   const manifest = JSON.parse(await fs.readFile(new URL('../public/source-manifest.json', import.meta.url), 'utf8'));
+  assert.ok(manifest.files.some(file => file.path === 'public/modules/runtime.js'));
+  assert.ok(manifest.files.some(file => file.path === 'public/runtime.css'));
   assert.ok(manifest.files.every(file => !/^api\//.test(file.path) && !/^lib\//.test(file.path) && !/\.env|\.vercel|\.openai/.test(file.path)));
 });
 

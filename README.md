@@ -26,6 +26,7 @@ This repository contains the complete application: native browser ES modules, HT
 | --- | --- | --- |
 | Home | Shared system overview | Select a component or processing interval |
 | Live | Scoped input inspection | Filter events and inspect their evidence |
+| Runtime | Component cabinet and shared processing evidence | Inspect six detailed modules and replay the selected Trace |
 | Core | Circuit structure and stage details | Pan, zoom, select a component and replay a path |
 | Memory | Browser-local Trace history | Save, reopen, import or export a record |
 | Source | Actual reviewed public files | Browse files, inspect code and copy content |
@@ -33,6 +34,10 @@ This repository contains the complete application: native browser ES modules, HT
 | Protocol | Technical manual | Read rules, responsibilities and data boundaries |
 
 Core retains the `#circuit` route. Source remains an internal reader; the header GitHub icon opens this repository separately.
+
+![CIRVYK Runtime cabinet showing six processing components and shared Trace evidence](docs/media/cirvyk-runtime.jpg)
+
+*The cabinet uses the selected example, historical record or observed window. Component metrics describe processing activity, not independent agents or hardware telemetry.*
 
 ## Signal processing
 
